@@ -4,3 +4,4 @@ frontend/dist/*
 !frontend/dist/gitkeep
 .claude/settings.local.json
 .DS_Store
+build/windows/installer/tmp/

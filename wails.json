@@ -9,5 +9,12 @@
   "author": {
     "name": "Selcuk Engin",
     "email": "info@engintasarim.com"
+  },
+  "info": {
+    "companyName": "LocalShare",
+    "productName": "LocalShare",
+    "productVersion": "0.1.0",
+    "copyright": "Copyright (c) 2026 Selcuk Engin",
+    "comments": "LAN file sharing for wired networks"
   }
 }

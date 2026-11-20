@@ -28,7 +28,8 @@ Grab the builds from `build/bin/`:
 | OS      | File                    | Notes |
 |---------|-------------------------|-------|
 | macOS   | `localshare.app` (Intel + Apple Silicon) | Copy to /Applications. First launch: right-click → **Open** (the app is not notarized). Allow **Local Network** access when asked. |
-| Windows | `LocalShare.exe`        | Needs the WebView2 runtime (preinstalled on Windows 10/11). When the firewall asks, allow **Private networks**. |
+| Windows | `LocalShare-Setup-0.1.0-amd64.exe` (installer) | Installs to Program Files with Start menu and desktop shortcuts, adds the firewall rule for Private/Domain networks, and installs WebView2 if missing. Uninstall from Settings → Apps. |
+| Windows | `LocalShare.exe` (portable) | Needs the WebView2 runtime (preinstalled on Windows 10/11). When the firewall asks, allow **Private networks**. |
 
 ### Firewall (if devices don't see each other)
 
@@ -80,6 +81,16 @@ wails dev                                   # live-reload dev mode
 go test ./internal/...                      # unit + loopback integration tests
 wails build -platform darwin/universal      # macOS app
 wails build -platform windows/amd64 -o LocalShare.exe   # Windows (cross-compiles from a Mac)
+```
+
+Windows installer (NSIS). Run `wails build -platform windows/amd64 -nsis -o LocalShare.exe`
+once to fill in `wails_tools.nsh` and download the WebView2 bootstrapper. Homebrew's
+`makensis` 3.13 crashes on macOS 27, so compile the installer with Linux NSIS in Docker:
+
+```bash
+docker run --rm -v "$PWD/build:/build" -w /build/windows/installer debian:stable-slim \
+  sh -c 'apt-get update -qq && apt-get install -y -qq nsis && makensis -DARG_WAILS_AMD64_BINARY=/build/bin/LocalShare.exe project.nsi'
+# → build/bin/LocalShare-Setup-<version>-amd64.exe
 ```
 
 Run two instances on one machine for testing:
