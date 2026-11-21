@@ -104,3 +104,18 @@ test('FAQ uses details and covers troubleshooting, LocalSend and GoatCounter', (
     expect(faq.text).toContain('LocalSend'); expect(faq.text).toContain('GoatCounter')
   }
 })
+
+test('GoatCounter tag on both pages, loaded async, no other third-party script', () => {
+  for (const p of ['', 'tr']) {
+    const tag = load(p).querySelector('script[data-goatcounter]')!
+    expect(tag.getAttribute('data-goatcounter')).toBe('https://patchdrop.goatcounter.com/count')
+    expect(tag.getAttribute('src')).toBe('//gc.zgo.at/count.js')
+    expect(tag.hasAttribute('async')).toBe(true)
+    const external = load(p).querySelectorAll('script[src]').map((s) => s.getAttribute('src')).filter((s) => /^(https?:)?\/\//.test(s!))
+    expect(external).toEqual(['//gc.zgo.at/count.js'])
+  }
+})
+test('language switch links carry lang tracking names', () => {
+  expect(load('').querySelectorAll('[data-track="lang-en"]').length).toBeGreaterThan(0)
+  expect(load('').querySelectorAll('[data-track="lang-tr"]').length).toBeGreaterThan(0)
+})

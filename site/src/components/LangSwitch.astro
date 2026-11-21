@@ -5,8 +5,8 @@ const { lang } = Astro.props
 const t = getDict(lang)
 ---
 <nav class="lang-switch" aria-label={t.nav.language}>
-  <a href="/" hreflang="en" lang="en" data-lang-link="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
-  <a href="/tr/" hreflang="tr" lang="tr" data-lang-link="tr" aria-current={lang === 'tr' ? 'true' : undefined}>TR</a>
+  <a href="/" hreflang="en" lang="en" data-lang-link="en" data-track="lang-en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+  <a href="/tr/" hreflang="tr" lang="tr" data-lang-link="tr" data-track="lang-tr" aria-current={lang === 'tr' ? 'true' : undefined}>TR</a>
 </nav>
 <script>
   import { LANG_KEY } from '../lib/lang'

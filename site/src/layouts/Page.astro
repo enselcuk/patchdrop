@@ -7,6 +7,7 @@ import { REDIRECT_SCRIPT, getDict } from '../lib/lang'
 import manropeLatin from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url'
 import manropeLatinExt from '@fontsource-variable/manrope/files/manrope-latin-ext-wght-normal.woff2?url'
 import '../styles/global.css'
+import { GOATCOUNTER_CODE } from '../config'
 
 interface Props {
   lang: 'en' | 'tr'
@@ -51,5 +52,6 @@ const fontCss = `
     </main>
     <Footer t={t} lang={lang} />
     {!notFound && <script>import '../scripts/main'</script>}
+    <script is:inline async data-goatcounter={`https://${GOATCOUNTER_CODE}.goatcounter.com/count`} src="//gc.zgo.at/count.js"></script>
   </body>
 </html>

@@ -1,6 +1,7 @@
 import { detectPlatform } from '../lib/platform'
 import { formatCount, parseLiveStats, shouldShowDownloads } from '../lib/release'
 import { copyOrSelect } from '../lib/share'
+import { trackEvent, wireCampaignCleanup, type GoatCounter } from '../lib/analytics'
 
 const API = 'https://api.github.com/repos/enselcuk/patchdrop'
 const TIMEOUT_MS = 4000
@@ -88,8 +89,17 @@ function wireShare(doc: Document, env: Window): void {
   })
 }
 
+function wireTracking(doc: Document, env: Window): void {
+  doc.addEventListener('click', (e) => {
+    const el = (e.target as Element | null)?.closest?.<HTMLElement>('[data-track]')
+    if (el?.dataset.track) trackEvent(el.dataset.track, (env as Window & { goatcounter?: GoatCounter }).goatcounter)
+  })
+  wireCampaignCleanup(doc, env)
+}
+
 export async function enhance(doc: Document, env: Window): Promise<void> {
   showHero(doc, env)
   wireShare(doc, env)
+  wireTracking(doc, env)
   await liveStats(doc, env)
 }
