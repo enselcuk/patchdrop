@@ -90,6 +90,8 @@ function wireShare(doc: Document, env: Window): void {
 }
 
 function wireTracking(doc: Document, env: Window): void {
+  // count.js sends via navigator.sendBeacon (image fallback only if that fails), which survives
+  // same-tab navigation, so links need no preventDefault/delay.
   doc.addEventListener('click', (e) => {
     const el = (e.target as Element | null)?.closest?.<HTMLElement>('[data-track]')
     if (el?.dataset.track) trackEvent(el.dataset.track, (env as Window & { goatcounter?: GoatCounter }).goatcounter)

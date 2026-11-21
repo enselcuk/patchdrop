@@ -21,29 +21,45 @@ export function trackEvent(name: string, gc?: GoatCounter): void {
 }
 
 /**
- * Strip campaign params from the address bar only after GoatCounter has had the
- * chance to read them: script load (and window load, when it sends the first view)
- * plus one tick; or after 3 s if the script is blocked.
+ * Page.astro sets window.goatcounter = { no_onload: true } before count.js, so count.js
+ * does not send the first view itself. We send it (exactly once) when count.js has run,
+ * then strip the campaign params one tick later. If count.js errors (blocked) nothing will read the
+ * URL, so strip at once. If neither happens, strip 3 s after window load (never earlier).
  */
 export function wireCampaignCleanup(doc: Document, env: Window): void {
-  const href = env.location?.href
-  if (!href || !env.history?.replaceState) return
-  let cleaned: string | null
-  try { cleaned = stripCampaignParams(href) } catch { return }
-  if (!cleaned) return
-  const target = cleaned
-  let done = false
+  const gcOf = () => (env as Window & { goatcounter?: GoatCounter & { count?: (v?: unknown) => void } }).goatcounter
+  const script = doc.querySelector('script[data-goatcounter]')
+  let counted = false
+  let stripped = false
+  let timer: number | undefined
+
   const strip = () => {
-    if (done) return
-    done = true
-    env.clearTimeout(fallback)
-    try { env.history.replaceState(null, '', target) } catch { /* ignore */ }
+    if (stripped) return
+    stripped = true
+    if (timer !== undefined) env.clearTimeout(timer)
+    const href = env.location?.href
+    if (!href || !env.history?.replaceState) return
+    try {
+      const cleaned = stripCampaignParams(href)
+      if (cleaned) env.history.replaceState(null, '', cleaned)
+    } catch {
+      // ignore
+    }
   }
-  const fallback = env.setTimeout(strip, STRIP_TIMEOUT_MS)
-  const afterTick = () => { env.setTimeout(strip, 0) }
-  doc.querySelector('script[data-goatcounter]')?.addEventListener('load', () => {
-    // count.js sends the first view on window load; wait for that too
-    if (doc.readyState === 'complete' || typeof env.addEventListener !== 'function') afterTick()
-    else env.addEventListener('load', afterTick, { once: true })
-  }, { once: true })
+  const pageview = () => {
+    if (counted) return
+    counted = true
+    try { (gcOf()?.count as ((v?: unknown) => void) | undefined)?.() } catch { /* never break the page */ }
+    env.setTimeout(strip, 0)
+  }
+
+  if (typeof gcOf()?.count === 'function') {
+    pageview()
+    return
+  }
+  script?.addEventListener('load', pageview, { once: true })
+  script?.addEventListener('error', () => { counted = true; strip() }, { once: true })
+  const arm = () => { timer = env.setTimeout(strip, STRIP_TIMEOUT_MS) }
+  if (doc.readyState === 'complete' || typeof env.addEventListener !== 'function') arm()
+  else env.addEventListener('load', arm, { once: true })
 }

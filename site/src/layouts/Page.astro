@@ -52,6 +52,7 @@ const fontCss = `
     </main>
     <Footer t={t} lang={lang} />
     {!notFound && <script>import '../scripts/main'</script>}
+    <script is:inline>window.goatcounter={no_onload:true}</script>
     <script is:inline async data-goatcounter={`https://${GOATCOUNTER_CODE}.goatcounter.com/count`} src="//gc.zgo.at/count.js"></script>
   </body>
 </html>

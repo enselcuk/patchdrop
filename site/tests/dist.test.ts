@@ -111,6 +111,9 @@ test('GoatCounter tag on both pages, loaded async, no other third-party script',
     expect(tag.getAttribute('data-goatcounter')).toBe('https://patchdrop.goatcounter.com/count')
     expect(tag.getAttribute('src')).toBe('//gc.zgo.at/count.js')
     expect(tag.hasAttribute('async')).toBe(true)
+    const html = readFileSync(`dist/${p}/index.html`.replace('//', '/'), 'utf8')
+    expect(html.indexOf('window.goatcounter={no_onload:true}')).toBeGreaterThan(-1)
+    expect(html.indexOf('window.goatcounter={no_onload:true}')).toBeLessThan(html.indexOf('gc.zgo.at/count.js'))
     const external = load(p).querySelectorAll('script[src]').map((s) => s.getAttribute('src')).filter((s) => /^(https?:)?\/\//.test(s!))
     expect(external).toEqual(['//gc.zgo.at/count.js'])
   }

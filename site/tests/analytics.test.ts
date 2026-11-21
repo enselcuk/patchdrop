@@ -36,46 +36,92 @@ test('click is safe when goatcounter is blocked', async () => {
   expect(() => document.querySelector<HTMLElement>('button')!.click()).not.toThrow()
 })
 
-// --- strip timing ---
-const mkTimingEnv = (href: string) => {
+// --- page view + strip timing ---
+const URL_UTM = 'https://patchdrop.enginsistem.com/?utm_source=x&a=1#h'
+const mk = (href: string, gc?: unknown, readyState: DocumentReadyState = 'complete') => {
   const replaceState = vi.fn()
-  return { env: { location: { href }, history: { replaceState }, setTimeout, clearTimeout } as unknown as Window, replaceState }
+  const listeners: Record<string, () => void> = {}
+  const env = { location: { href }, history: { replaceState }, setTimeout, clearTimeout, goatcounter: gc,
+    addEventListener: (n: string, f: () => void) => { listeners[n] = f } } as unknown as Window
+  Object.defineProperty(document, 'readyState', { value: readyState, configurable: true })
+  return { env, replaceState, listeners }
 }
+const script = () => document.querySelector('script')!
 beforeEach(() => { vi.useFakeTimers(); document.head.innerHTML = '<script data-goatcounter="x" src="//gc.zgo.at/count.js"></script>' })
-afterEach(() => { vi.useRealTimers(); document.head.innerHTML = '' })
+afterEach(() => { vi.useRealTimers(); document.head.innerHTML = ''; delete (document as { readyState?: unknown }).readyState })
 
-test('strips after script load plus one tick, not before', () => {
-  const { env, replaceState } = mkTimingEnv('https://patchdrop.enginsistem.com/?utm_source=x&a=1#h')
+test('script still loading at 3 s from enhance (window not loaded yet): params survive', () => {
+  const { env, replaceState } = mk(URL_UTM, { no_onload: true }, 'loading')
   wireCampaignCleanup(document, env)
-  vi.advanceTimersByTime(1000)
+  vi.advanceTimersByTime(3000)
   expect(replaceState).not.toHaveBeenCalled()
-  document.querySelector('script')!.dispatchEvent(new Event('load'))
+})
+
+test('load: count() once with no args, then strip after a tick', () => {
+  const gc: { no_onload: boolean; count?: ReturnType<typeof vi.fn> } = { no_onload: true }
+  const { env, replaceState } = mk(URL_UTM, gc)
+  wireCampaignCleanup(document, env)
+  gc.count = vi.fn()
+  script().dispatchEvent(new Event('load'))
+  expect(gc.count).toHaveBeenCalledTimes(1)
+  expect(gc.count).toHaveBeenCalledWith()
   expect(replaceState).not.toHaveBeenCalled()
   vi.advanceTimersByTime(0)
   expect(replaceState).toHaveBeenCalledWith(null, '', 'https://patchdrop.enginsistem.com/?a=1#h')
+  vi.advanceTimersByTime(10000)
+  expect(gc.count).toHaveBeenCalledTimes(1)
+  expect(replaceState).toHaveBeenCalledTimes(1)
 })
 
-test('strips at 3 s if the script never loads', () => {
-  const { env, replaceState } = mkTimingEnv('https://patchdrop.enginsistem.com/?utm_source=x')
+test('already loaded before enhance: count() once, then strip', () => {
+  const count = vi.fn()
+  const { env, replaceState } = mk(URL_UTM, { count })
   wireCampaignCleanup(document, env)
+  expect(count).toHaveBeenCalledTimes(1)
+  expect(replaceState).not.toHaveBeenCalled()
+  vi.advanceTimersByTime(0)
+  expect(replaceState).toHaveBeenCalledTimes(1)
+  script().dispatchEvent(new Event('load'))
+  vi.advanceTimersByTime(5000)
+  expect(count).toHaveBeenCalledTimes(1)
+})
+
+test('error (blocked): strip immediately, nothing counted', () => {
+  const { env, replaceState } = mk(URL_UTM, { no_onload: true })
+  wireCampaignCleanup(document, env)
+  script().dispatchEvent(new Event('error'))
+  expect(replaceState).toHaveBeenCalledTimes(1)
+  vi.advanceTimersByTime(5000)
+  expect(replaceState).toHaveBeenCalledTimes(1)
+})
+
+test('never loads: strip 3 s after window load, not before', () => {
+  const { env, replaceState, listeners } = mk(URL_UTM, { no_onload: true }, 'loading')
+  wireCampaignCleanup(document, env)
+  vi.advanceTimersByTime(10000)
+  expect(replaceState).not.toHaveBeenCalled()
+  listeners.load()
   vi.advanceTimersByTime(2999)
   expect(replaceState).not.toHaveBeenCalled()
   vi.advanceTimersByTime(1)
   expect(replaceState).toHaveBeenCalledTimes(1)
 })
 
-test('strips only once when load comes before the timeout', () => {
-  const { env, replaceState } = mkTimingEnv('https://patchdrop.enginsistem.com/?ref=x')
+test('late load after the 3 s strip still counts the view once', () => {
+  const gc: { count?: ReturnType<typeof vi.fn> } = {}
+  const { env } = mk(URL_UTM, gc)
   wireCampaignCleanup(document, env)
-  document.querySelector('script')!.dispatchEvent(new Event('load'))
-  vi.advanceTimersByTime(5000)
-  expect(replaceState).toHaveBeenCalledTimes(1)
+  vi.advanceTimersByTime(3000)
+  gc.count = vi.fn()
+  script().dispatchEvent(new Event('load'))
+  expect(gc.count).toHaveBeenCalledTimes(1)
 })
 
-test('does nothing when there is nothing to strip', () => {
-  const { env, replaceState } = mkTimingEnv('https://patchdrop.enginsistem.com/#faq')
+test('nothing to strip: view still counted, no replaceState', () => {
+  const count = vi.fn()
+  const { env, replaceState } = mk('https://patchdrop.enginsistem.com/#faq', { count })
   wireCampaignCleanup(document, env)
-  document.querySelector('script')!.dispatchEvent(new Event('load'))
   vi.advanceTimersByTime(5000)
+  expect(count).toHaveBeenCalledTimes(1)
   expect(replaceState).not.toHaveBeenCalled()
 })
