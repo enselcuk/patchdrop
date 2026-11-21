@@ -2,7 +2,7 @@ import type { Dict } from './types'
 
 const tr: Dict = {
   meta: {
-    title: 'PatchDrop: ofis kablosundan dosya paylaşın',
+    title: 'PatchDrop: kablolu ağda dosya paylaşın',
     description:
       'Mac ve Windows arasında, kablolu ofis ağınız üzerinden ücretsiz ve açık kaynak dosya paylaşımı. İnternet ve hesap gerekmez. Beta.',
   },
