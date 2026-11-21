@@ -9,7 +9,7 @@ const HTML = `
 <div data-hero-platform data-for="mobile" hidden><a href="#share" data-track="send-to-computer">Send</a></div>
 <span data-stars>0</span>
 <p data-downloads hidden><span data-downloads-count>0</span> downloads</p>
-<section id="share" data-share-title="PatchDrop" data-share-text="txt">
+<section id="share" data-share-title="PatchDrop" data-share-text="txt" data-select-hint="Select it">
   <input data-share-url readonly value="https://patchdrop.enginsistem.com/">
   <button data-track="share-copy" data-copied="Link copied">Copy</button>
   <button data-track="share-native" hidden>Share</button>
@@ -52,11 +52,14 @@ test('non-finite stars are ignored', async () => {
   await enhance(doc, env(MAC, okFetch('x', 500)))
   expect(doc.querySelector('[data-stars]')!.textContent).toBe('0')
 })
-test('copy button announces via live region (clipboard unavailable selects)', async () => {
+test('selected path announces the hint and selects the field', async () => {
   await enhance(doc, env(MAC, failing))
   doc.querySelector<HTMLElement>('[data-track="share-copy"]')!.click()
   await new Promise((r) => setTimeout(r, 0))
-  expect(doc.querySelector('[data-share-status]')!.textContent).toBe('')
+  const input = doc.querySelector<HTMLInputElement>('[data-share-url]')!
+  expect(doc.querySelector('[data-share-status]')!.textContent).toBe('Select it')
+  expect(doc.activeElement).toBe(input)
+  expect([input.selectionStart, input.selectionEnd]).toEqual([0, input.value.length])
 })
 test('copy success announces', async () => {
   await enhance(doc, env(MAC, failing, { clipboard: { writeText: async () => {} } }))
@@ -81,4 +84,25 @@ test('send-to-computer uses navigator.share and prevents default', async () => {
   doc.querySelector('[data-track="send-to-computer"]')!.dispatchEvent(ev)
   expect(ev.defaultPrevented).toBe(true)
   expect(arg).toBeTruthy()
+})
+
+const flush = () => new Promise((r) => setTimeout(r, 0))
+test('share rejecting with a non-AbortError falls back to select and scrolls', async () => {
+  let scrolled = 0
+  doc.querySelector('#share')!.scrollIntoView = () => { scrolled++ }
+  await enhance(doc, env(MAC, failing, { share: () => Promise.reject(Object.assign(new Error('x'), { name: 'NotAllowedError' })) }, 5))
+  doc.querySelector<HTMLElement>('[data-track="send-to-computer"]')!.click()
+  await flush(); await flush()
+  expect(scrolled).toBe(1)
+  expect(doc.querySelector('[data-share-status]')!.textContent).toBe('Select it')
+  expect(doc.activeElement).toBe(doc.querySelector('[data-share-url]'))
+})
+test('share rejecting with AbortError does nothing more', async () => {
+  let scrolled = 0
+  doc.querySelector('#share')!.scrollIntoView = () => { scrolled++ }
+  await enhance(doc, env(MAC, failing, { share: () => Promise.reject(Object.assign(new Error('x'), { name: 'AbortError' })) }))
+  doc.querySelector<HTMLElement>('[data-track="share-native"]')!.click()
+  await flush(); await flush()
+  expect(scrolled).toBe(0)
+  expect(doc.querySelector('[data-share-status]')!.textContent).toBe('')
 })

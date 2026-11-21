@@ -60,19 +60,27 @@ function wireShare(doc: Document, env: Window): void {
   const data = () => ({ title: section.dataset.shareTitle ?? 'PatchDrop', text: section.dataset.shareText ?? '', url: input.value })
 
   const announce = (result: 'copied' | 'selected') => {
-    if (status) status.textContent = result === 'copied' ? (copyBtn?.dataset.copied ?? '') : ''
+    if (status) status.textContent = (result === 'copied' ? copyBtn?.dataset.copied : section.dataset.selectHint) ?? ''
   }
   const copy = async () => announce(await copyOrSelect(input.value, input, nav.clipboard))
+  // Share sheet failed for a reason other than the user closing it: fall back to copy/select and show the field.
+  const share = () => {
+    nav.share(data()).catch((err: unknown) => {
+      if ((err as { name?: string } | null)?.name === 'AbortError') return
+      section.scrollIntoView?.()
+      void copy()
+    })
+  }
 
   copyBtn?.addEventListener('click', () => { void copy() })
   if (nativeBtn && canShare) {
     nativeBtn.hidden = false
-    nativeBtn.addEventListener('click', () => { nav.share(data()).catch(() => {}) })
+    nativeBtn.addEventListener('click', share)
   }
   sendBtn?.addEventListener('click', (e) => {
     if (canShare) {
       e.preventDefault()
-      nav.share(data()).catch(() => {})
+      share()
     } else {
       // href="#share" still scrolls to the link field; copy or select it as we go.
       void copy()
