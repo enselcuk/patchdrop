@@ -107,7 +107,21 @@ const en = {
     releaseNotes: 'Release notes',
     checksums: 'SHA-256 checksums',
   },
-  share: { title: 'Share' },
+  share: {
+    title: 'Share PatchDrop',
+    lead: 'Know an office with Mac and Windows computers on one cable? Send them the link.',
+    text: 'A free, open-source app for sharing files between Mac and Windows on a wired office network: PatchDrop',
+    shareOn: 'Share on',
+    linkedin: 'LinkedIn',
+    x: 'X',
+    facebook: 'Facebook',
+    whatsapp: 'WhatsApp',
+    urlLabel: 'Page link',
+    copy: 'Copy link',
+    copied: 'Link copied',
+    native: 'Share…',
+    selectHint: 'Select the link and copy it',
+  },
   faq: {
     title: 'Questions',
     items: [

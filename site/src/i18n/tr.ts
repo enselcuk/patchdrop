@@ -109,7 +109,21 @@ const tr: Dict = {
     releaseNotes: 'Sürüm notları',
     checksums: 'SHA-256 sağlama değerleri',
   },
-  share: { title: 'Paylaş' },
+  share: {
+    title: 'PatchDrop’u paylaşın',
+    lead: 'Mac ve Windows bilgisayarları aynı kabloya bağlı bir ofis mi biliyorsunuz? Bağlantıyı gönderin.',
+    text: 'Kablolu ofis ağında Mac ve Windows arasında dosya paylaşmak için ücretsiz ve açık kaynak bir uygulama: PatchDrop',
+    shareOn: 'Paylaş:',
+    linkedin: 'LinkedIn',
+    x: 'X',
+    facebook: 'Facebook',
+    whatsapp: 'WhatsApp',
+    urlLabel: 'Sayfa bağlantısı',
+    copy: 'Bağlantıyı kopyala',
+    copied: 'Bağlantı kopyalandı',
+    native: 'Paylaş…',
+    selectHint: 'Bağlantıyı seçip kopyalayın',
+  },
   faq: {
     title: 'Sık sorulan sorular',
     items: [

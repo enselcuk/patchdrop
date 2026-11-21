@@ -1,0 +1,54 @@
+---
+import type { Dict, Lang } from '../i18n/types'
+import { shareLinks } from '../lib/share'
+import Icon from './Icon.astro'
+interface Props { t: Dict; lang: Lang }
+const { t, lang } = Astro.props
+const s = t.share
+const url = lang === 'tr' ? 'https://patchdrop.enginsistem.com/tr/' : 'https://patchdrop.enginsistem.com/'
+const links = shareLinks(url, lang)
+const nets = [
+  { key: 'linkedin', label: s.linkedin, href: links.linkedin },
+  { key: 'x', label: s.x, href: links.x },
+  { key: 'facebook', label: s.facebook, href: links.facebook },
+  { key: 'whatsapp', label: s.whatsapp, href: links.whatsapp },
+] as const
+---
+<section class="section share" id="share" aria-labelledby="share-title" data-share-title="PatchDrop" data-share-text={s.text}>
+  <div class="container">
+    <div class="section-head">
+      <h2 id="share-title">{s.title}</h2>
+      <p>{s.lead}</p>
+    </div>
+    <div class="share__card">
+      <ul class="share__nets" aria-label={s.shareOn}>
+        {nets.map((n) => (
+          <li><a class="btn btn--secondary btn--small" href={n.href} target="_blank" rel="noopener" data-track={`share-${n.key}`}>{n.label}</a></li>
+        ))}
+      </ul>
+      <div class="share__link">
+        <label class="visually-hidden" for="share-url">{s.urlLabel}</label>
+        <input id="share-url" type="text" readonly value={url} data-share-url />
+        <button type="button" class="btn btn--primary btn--small" data-track="share-copy" data-copied={s.copied}>{s.copy}</button>
+        <button type="button" class="btn btn--secondary btn--small" data-track="share-native" hidden>{s.native}</button>
+      </div>
+      <p class="visually-hidden" role="status" aria-live="polite" data-share-status></p>
+      <p class="share__star">
+        <a class="btn btn--secondary" href="https://github.com/enselcuk/patchdrop" data-track="star-share">
+          <Icon name="star" />{t.hero.star}
+        </a>
+      </p>
+    </div>
+  </div>
+</section>
+<style>
+  .share__card { max-width: 640px; margin: 0 auto; display: grid; gap: 20px; justify-items: center; }
+  .share__nets { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .share__link { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; }
+  .share__link input {
+    flex: 1 1 260px; min-width: 0; min-height: 40px; padding: 0 16px; font: inherit; font-size: 0.9375rem;
+    color: var(--ink); background: #fff; border: 1px solid #0b1b3326; border-radius: 999px;
+  }
+  .share__star { margin-top: 4px; }
+  [hidden] { display: none !important; }
+</style>

@@ -50,5 +50,6 @@ const fontCss = `
       <slot />
     </main>
     <Footer t={t} lang={lang} />
+    {!notFound && <script>import '../scripts/main'</script>}
   </body>
 </html>
