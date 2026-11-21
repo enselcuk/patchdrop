@@ -1,0 +1,30 @@
+---
+interface Props {
+  lang: 'en' | 'tr'
+  path: '/' | '/tr/'
+  title: string
+  description: string
+  ogImage: string
+}
+const { lang, path, title, description, ogImage } = Astro.props
+const origin = 'https://patchdrop.enginsistem.com'
+const canonical = origin + path
+const locale = lang === 'tr' ? 'tr_TR' : 'en_US'
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<link rel="alternate" hreflang="en" href={origin + '/'} />
+<link rel="alternate" hreflang="tr" href={origin + '/tr/'} />
+<link rel="alternate" hreflang="x-default" href={origin + '/'} />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="PatchDrop" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:locale" content={locale} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />

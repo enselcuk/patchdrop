@@ -1,0 +1,22 @@
+---
+import { getDict } from '../lib/lang'
+interface Props { lang: 'en' | 'tr' }
+const { lang } = Astro.props
+const t = getDict(lang)
+---
+<nav class="lang-switch" aria-label={t.nav.language}>
+  <a href="/" hreflang="en" lang="en" data-lang-link="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+  <a href="/tr/" hreflang="tr" lang="tr" data-lang-link="tr" aria-current={lang === 'tr' ? 'true' : undefined}>TR</a>
+</nav>
+<script>
+  import { LANG_KEY } from '../lib/lang'
+  document.querySelectorAll<HTMLAnchorElement>('a[data-lang-link]').forEach((a) => {
+    a.addEventListener('click', () => {
+      try {
+        localStorage.setItem(LANG_KEY, a.dataset.langLink ?? 'en')
+      } catch {
+        // storage unavailable (private mode): navigate anyway
+      }
+    })
+  })
+</script>

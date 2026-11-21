@@ -1,18 +1,26 @@
 ---
+import Seo from '../components/Seo.astro'
+import LangSwitch from '../components/LangSwitch.astro'
+import { REDIRECT_SCRIPT, getDict } from '../lib/lang'
+
 interface Props {
   lang: 'en' | 'tr'
   path: '/' | '/tr/'
 }
-const { lang } = Astro.props
+const { lang, path } = Astro.props
+const t = getDict(lang)
+const ogImage = `https://patchdrop.enginsistem.com/og-${lang}.png`
 ---
 <!doctype html>
 <html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PatchDrop</title>
+    {path === '/' && <script is:inline data-lang-redirect set:html={REDIRECT_SCRIPT} />}
+    <Seo lang={lang} path={path} title={t.meta.title} description={t.meta.description} ogImage={ogImage} />
   </head>
   <body>
+    <LangSwitch lang={lang} />
     <slot />
   </body>
 </html>
