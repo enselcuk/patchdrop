@@ -122,3 +122,11 @@ test('language switch links carry lang tracking names', () => {
   expect(load('').querySelectorAll('[data-track="lang-en"]').length).toBeGreaterThan(0)
   expect(load('').querySelectorAll('[data-track="lang-tr"]').length).toBeGreaterThan(0)
 })
+
+test('404 pages keep count.js own page view: tag present, no no_onload script', () => {
+  for (const f of ['dist/404.html', 'dist/tr/404/index.html']) {
+    const html = readFileSync(f, 'utf8')
+    expect(html).toContain('//gc.zgo.at/count.js')
+    expect(html).not.toContain('no_onload')
+  }
+})
