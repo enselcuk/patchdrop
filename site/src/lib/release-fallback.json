@@ -1,0 +1,13 @@
+{
+  "version": "0.1.0",
+  "publishedAt": "2026-11-20T15:21:37Z",
+  "stars": 0,
+  "downloads": 0,
+  "sizes": {
+    "PatchDrop-macOS.dmg": 10552598,
+    "PatchDrop-macOS-universal.zip": 9503294,
+    "PatchDrop-Windows-Setup-x64.exe": 7160096,
+    "PatchDrop-Windows-x64.zip": 5297126,
+    "SHA256SUMS.txt": 372
+  }
+}
