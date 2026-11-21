@@ -1,25 +1,9 @@
-import { detectPlatform } from '../lib/platform'
-import { formatCount, parseLiveStats, shouldShowDownloads } from '../lib/release'
+import { REPO, formatCount, parseLiveStats, shouldShowDownloads } from '../lib/release'
 import { copyOrSelect } from '../lib/share'
 import { trackEvent, wireCampaignCleanup, type GoatCounter } from '../lib/analytics'
 
-const API = 'https://api.github.com/repos/enselcuk/patchdrop'
+const API = `https://api.github.com/repos/${REPO}`
 const TIMEOUT_MS = 4000
-
-type Nav = Navigator & { userAgentData?: { platform?: string; mobile?: boolean } }
-
-function showHero(doc: Document, env: Window): void {
-  const nav = env.navigator as Nav
-  const p = detectPlatform({
-    ua: nav.userAgent ?? '',
-    platform: nav.platform,
-    maxTouchPoints: nav.maxTouchPoints,
-    uaDataPlatform: nav.userAgentData?.platform,
-    uaDataMobile: nav.userAgentData?.mobile,
-  })
-  const key = p === 'mac' || p === 'windows' || p === 'mobile' ? p : 'other'
-  doc.querySelectorAll<HTMLElement>('[data-hero-platform]').forEach((el) => { el.hidden = el.dataset.for !== key })
-}
 
 async function liveStats(doc: Document, env: Window): Promise<void> {
   const lang = doc.documentElement.lang === 'tr' ? 'tr' : 'en'
@@ -100,7 +84,6 @@ function wireTracking(doc: Document, env: Window): void {
 }
 
 export async function enhance(doc: Document, env: Window): Promise<void> {
-  showHero(doc, env)
   wireShare(doc, env)
   wireTracking(doc, env)
   await liveStats(doc, env)

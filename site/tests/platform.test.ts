@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { detectPlatform } from '../src/lib/platform'
+import { PLATFORM_SCRIPT, detectPlatform, heroBlock, type PlatformEnv } from '../src/lib/platform'
 
 const UA = {
   macSafari: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15',
@@ -35,3 +35,35 @@ test('Mac UA with maxTouchPoints 1 (touch-capable display) → mac', () =>
   expect(detectPlatform({ ua: UA.macSafari, maxTouchPoints: 1 })).toBe('mac'))
 test('Mac UA with maxTouchPoints undefined → mac', () =>
   expect(detectPlatform({ ua: UA.macSafari })).toBe('mac'))
+
+test('heroBlock maps linux and unknown to other', () => {
+  expect(heroBlock('mac')).toBe('mac')
+  expect(heroBlock('windows')).toBe('windows')
+  expect(heroBlock('mobile')).toBe('mobile')
+  expect(heroBlock('linux')).toBe('other')
+  expect(heroBlock('unknown')).toBe('other')
+})
+
+// Evaluate the shipped inline head script and compare with detectPlatform + heroBlock.
+function runInline(env: PlatformEnv): string | undefined {
+  const navigator = { userAgent: env.ua, maxTouchPoints: env.maxTouchPoints, userAgentData: env.uaDataMobile === undefined ? undefined : { mobile: env.uaDataMobile } }
+  const html = { dataset: {} as Record<string, string> }
+  new Function('navigator', 'document', PLATFORM_SCRIPT)(navigator, { documentElement: html })
+  return html.dataset.platform
+}
+
+test('inline platform script agrees with detectPlatform for every UA case', () => {
+  let n = 0
+  for (const ua of [...Object.values(UA), '']) for (const maxTouchPoints of [undefined, 0, 1, 5]) for (const uaDataMobile of [undefined, false, true]) {
+    const env = { ua, maxTouchPoints, uaDataMobile }
+    expect(runInline(env), JSON.stringify(env)).toBe(heroBlock(detectPlatform(env)))
+    n++
+  }
+  expect(n).toBe(144)
+})
+
+test('inline platform script survives a missing navigator', () => {
+  const html = { dataset: {} as Record<string, string> }
+  expect(() => new Function('navigator', 'document', PLATFORM_SCRIPT)(undefined, { documentElement: html })).not.toThrow()
+  expect(html.dataset.platform).toBeUndefined()
+})

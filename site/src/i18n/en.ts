@@ -13,7 +13,6 @@ const en = {
   },
   nav: {
     how: 'How it works',
-    features: 'Features',
     download: 'Download',
     faq: 'FAQ',
     github: 'GitHub',
@@ -63,7 +62,7 @@ const en = {
     sub: 'Small app, does one job well.',
     items: [
       { title: 'Full cable speed', text: 'Files go straight across your office network, as fast as the cable allows.' },
-      { title: 'Encrypted, verified devices', text: 'Every transfer is encrypted with TLS 1.3. Each computer has its own certificate, and PatchDrop won’t send if it doesn’t match the one it expects.' },
+      { title: 'Encrypted transfers', text: 'Every transfer is encrypted with TLS 1.3. Each computer has its own certificate, and PatchDrop won’t send if it doesn’t match the one it expects.' },
       { title: 'No internet, no cloud', text: 'Nothing leaves your network. It even works when the internet is down.' },
       { title: 'Whole folders', text: 'Send a folder and it arrives with all its subfolders in place.' },
       { title: 'Mac + Windows', text: 'Intel and Apple Silicon Macs, Windows 10 and 11, in any direction.' },
@@ -91,7 +90,7 @@ const en = {
     macSteps: [
       'Open the .dmg and drag PatchDrop into Applications.',
       'Open PatchDrop once. When macOS blocks it, click Done.',
-      'Go to System Settings → Privacy & Security.',
+      'Go to System Settings → Privacy & Security (on macOS 12: System Preferences → Security & Privacy → Open Anyway).',
       'Scroll down, click Open Anyway next to PatchDrop and confirm. Allow Local Network access when asked.',
     ],
     macFigure: 'Privacy & Security',

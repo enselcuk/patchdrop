@@ -13,16 +13,20 @@ test('empty list / garbage saved value → en', () => {
 // Evaluate the inline redirect source and compare with pickLanguage.
 function runInline(saved: string | null, langs: string[], throws = false): string | null {
   let target: string | null = null
+  // Record the key and assert after the call: an expect() inside getItem would throw
+  // into the script's own try/catch and a wrong key would pass silently.
+  const keys: string[] = []
   const localStorage = {
     getItem: (k: string) => {
+      keys.push(k)
       if (throws) throw new Error('denied')
-      expect(k).toBe(LANG_KEY)
       return saved
     },
   }
   const navigator = { languages: langs, language: langs[0] }
   const location = { search: '?a=1', hash: '#x', replace: (u: string) => { target = u } }
   new Function('localStorage', 'navigator', 'location', REDIRECT_SCRIPT)(localStorage, navigator, location)
+  expect(keys).toEqual([LANG_KEY])
   return target
 }
 

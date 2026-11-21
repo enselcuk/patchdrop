@@ -2,10 +2,11 @@
 import type { Dict, Lang } from '../i18n/types'
 import LangSwitch from './LangSwitch.astro'
 import Icon from './Icon.astro'
+import { REPO } from '../lib/release'
 interface Props { t: Dict; lang: Lang }
 const { t, lang } = Astro.props
 const f = t.footer
-const repo = 'https://github.com/enselcuk/patchdrop'
+const repo = `https://github.com/${REPO}`
 ---
 <footer class="footer">
   <div class="container footer__inner">

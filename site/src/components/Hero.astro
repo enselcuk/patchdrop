@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import type { Dict, Lang } from '../i18n/types'
-import { ASSETS, downloadUrl, formatCount, type ReleaseInfo } from '../lib/release'
+import { ASSETS, REPO, downloadUrl, formatCount, shouldShowDownloads, type ReleaseInfo } from '../lib/release'
 import Icon from './Icon.astro'
 import shotEn from '../assets/screenshot-en.png'
 import shotTr from '../assets/screenshot-tr.png'
@@ -9,7 +9,7 @@ interface Props { t: Dict; lang: Lang; release: ReleaseInfo }
 const { t, lang, release } = Astro.props
 const h = t.hero
 const shot = lang === 'tr' ? shotTr : shotEn
-const repo = 'https://github.com/enselcuk/patchdrop'
+const repo = `https://github.com/${REPO}`
 const version = `v${release.version} ${h.beta}`
 // Keep hyphenated words ("sürükle-bırak") from breaking at the hyphen.
 const words = (text: string) => text.split(' ').map((w) => ({ w, keep: w.includes('-') }))
@@ -57,7 +57,7 @@ const words = (text: string) => text.split(' ').map((w) => ({ w, keep: w.include
         <Icon name="star" />{h.star}
         <span class="hero__count"><span class="visually-hidden">{h.starsLabel}: </span><span data-stars>{formatCount(release.stars, lang)}</span></span>
       </a>
-      <p class="hero__downloads" data-downloads hidden>
+      <p class="hero__downloads" data-downloads hidden={!shouldShowDownloads(release.downloads)}>
         <span data-downloads-count>{formatCount(release.downloads, lang)}</span> {h.downloads}
       </p>
     </div>
@@ -102,6 +102,17 @@ const words = (text: string) => text.split(' ').map((w) => ({ w, keep: w.include
     gap: 12px; margin-top: 32px;
   }
   .hero__platform { display: contents; }
+  /*
+   * The inline head script (PLATFORM_SCRIPT) sets html[data-platform] before first
+   * paint. The `hidden` attributes stay as the no-JS default (only "other" shows),
+   * so these rules must beat global.css's `[hidden] { display: none !important }`.
+   */
+  :global(html[data-platform="mac"]) .hero__platform[data-for="mac"],
+  :global(html[data-platform="windows"]) .hero__platform[data-for="windows"],
+  :global(html[data-platform="mobile"]) .hero__platform[data-for="mobile"] { display: contents !important; }
+  :global(html[data-platform="mac"]) .hero__platform[data-for="other"],
+  :global(html[data-platform="windows"]) .hero__platform[data-for="other"],
+  :global(html[data-platform="mobile"]) .hero__platform[data-for="other"] { display: none !important; }
   .hero__star { order: 1; }
   .hero__meta, .hero__downloads { order: 2; flex-basis: 100%; margin-top: 4px; font-size: 0.9375rem; color: var(--muted); }
   .hero__downloads { order: 3; margin-top: -6px; }

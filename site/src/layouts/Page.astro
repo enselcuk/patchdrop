@@ -4,6 +4,7 @@ import BetaBar from '../components/BetaBar.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import { REDIRECT_SCRIPT, getDict } from '../lib/lang'
+import { PLATFORM_SCRIPT } from '../lib/platform'
 import manropeLatin from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url'
 import manropeLatinExt from '@fontsource-variable/manrope/files/manrope-latin-ext-wght-normal.woff2?url'
 import '../styles/global.css'
@@ -31,6 +32,9 @@ const fontCss = `
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {path === '/' && !notFound && <script is:inline data-lang-redirect set:html={REDIRECT_SCRIPT} />}
+    {!notFound && <script is:inline data-platform-detect set:html={PLATFORM_SCRIPT} />}
+    {/* GitHub Pages serves only /404.html (English); send missing /tr/… paths to the Turkish 404. */}
+    {notFound && lang === 'en' && <script is:inline data-tr-404>if(location.pathname.indexOf('/tr/')===0)location.replace('/tr/404/')</script>}
     {notFound
       ? <>
           <title>{`${t.notFound.title} · PatchDrop`}</title>
@@ -53,6 +57,6 @@ const fontCss = `
     <Footer t={t} lang={lang} />
     {!notFound && <script>import '../scripts/main'</script>}
     {!notFound && <script is:inline>window.goatcounter={no_onload:true}</script>}
-    <script is:inline async data-goatcounter={`https://${GOATCOUNTER_CODE}.goatcounter.com/count`} src="//gc.zgo.at/count.js"></script>
+    <script is:inline async data-goatcounter={`https://${GOATCOUNTER_CODE}.goatcounter.com/count`} src="https://gc.zgo.at/count.js"></script>
   </body>
 </html>

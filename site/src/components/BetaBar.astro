@@ -1,6 +1,7 @@
 ---
 import type { Dict } from '../i18n/types'
 import Icon from './Icon.astro'
+import { REPO } from '../lib/release'
 interface Props { t: Dict }
 const { t } = Astro.props
 ---
@@ -8,7 +9,7 @@ const { t } = Astro.props
   <div class="container beta__inner">
     <p>
       <span class="beta__pill">{t.beta.label}</span>
-      <span>{t.beta.text} {t.beta.ask} <a href="https://github.com/enselcuk/patchdrop/issues">{t.beta.link}</a></span>
+      <span>{t.beta.text} {t.beta.ask} <a href={`https://github.com/${REPO}/issues`}>{t.beta.link}</a></span>
     </p>
     <button type="button" class="beta__close" data-beta-close hidden aria-label={t.beta.dismiss}>
       <Icon name="close" size={18} />

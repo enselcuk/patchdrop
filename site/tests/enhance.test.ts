@@ -26,10 +26,15 @@ const MAC = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.1
 const WIN = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
 const LINUX = 'Mozilla/5.0 (X11; Linux x86_64)'
 
-test('shows only the mac hero block on mac', async () => { await enhance(doc, env(MAC, failing)); expect(visible(doc)).toEqual(['mac']) })
-test('windows', async () => { await enhance(doc, env(WIN, failing)); expect(visible(doc)).toEqual(['windows']) })
-test('linux keeps other', async () => { await enhance(doc, env(LINUX, failing)); expect(visible(doc)).toEqual(['other']) })
-test('iPad shows mobile block', async () => { await enhance(doc, env(MAC, failing, {}, 5)); expect(visible(doc)).toEqual(['mobile']) })
+// The hero block is chosen by the inline head script (PLATFORM_SCRIPT, tests/platform.test.ts)
+// and CSS; enhance must leave the server-rendered `hidden` defaults alone.
+test('does not touch the hero platform blocks', async () => {
+  for (const [ua, touch] of [[MAC, 0], [WIN, 0], [LINUX, 0], [MAC, 5]] as const) {
+    document.body.innerHTML = HTML
+    await enhance(doc, env(ua, failing, {}, touch))
+    expect(visible(doc)).toEqual(['other'])
+  }
+})
 test('keeps baked numbers when fetch fails', async () => {
   await enhance(doc, env(MAC, failing))
   expect(doc.querySelector('[data-stars]')!.textContent).toBe('0')

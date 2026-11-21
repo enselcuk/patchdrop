@@ -57,13 +57,16 @@ test('made-by links exact and followed', () => {
   expect(a.every(x => !(x.getAttribute('rel') ?? '').includes('nofollow'))).toBe(true) })
 test('mac tips say Open Anyway, never right-click → Open', () => {
   for (const p of ['', 'tr']) { const t = load(p).querySelector('#download')!.text
-    expect(t).toMatch(/Open Anyway|Yine de Aç/); expect(t).not.toMatch(/right-click|sağ tık/i) } })
+    expect(t).toMatch(/Open Anyway|Yine de Aç/); expect(t).not.toMatch(/right-click|sağ tık/i) }
+  expect(load('').querySelector('#download')!.text).toContain('on macOS 12: System Preferences → Security & Privacy → Open Anyway')
+  expect(load('tr').querySelector('#download')!.text).toContain('macOS 12’de: Sistem Tercihleri → Güvenlik ve Gizlilik → Yine de Aç') })
 test('footer copyright', () => expect(load('').querySelector('footer')!.text).toContain('© 2026 Engin Tasarım Ltd. Şti.'))
 test('404 pages exist in both languages', () => { expect(existsSync('dist/404.html')).toBe(true); expect(existsSync('dist/tr/404/index.html')).toBe(true) })
 test('beta bar links to GitHub issues', () => expect(load('').querySelector('[data-beta] a')!.getAttribute('href')).toBe('https://github.com/enselcuk/patchdrop/issues'))
 
 test('hero renders four platform blocks; only "other" is visible without JS', () => {
   for (const p of ['', 'tr']) {
+    expect(load(p).querySelector('head script[data-platform-detect]')).toBeTruthy()
     const blocks = load(p).querySelectorAll('[data-hero-platform]')
     expect(blocks.map(b => b.getAttribute('data-for')).sort()).toEqual(['mac', 'mobile', 'other', 'windows'])
     expect(blocks.filter(b => !b.hasAttribute('hidden')).map(b => b.getAttribute('data-for'))).toEqual(['other'])
@@ -75,7 +78,9 @@ test('live-number hooks and anchors', () => {
   for (const p of ['', 'tr']) {
     const h = load(p)
     expect(h.querySelector('[data-stars]')!.text.trim()).not.toBe('')
-    expect(h.querySelector('[data-downloads]')!.hasAttribute('hidden')).toBe(true)
+    // Baked visible only at >= 100 downloads; when shown it must carry a count.
+    const dl = h.querySelector('[data-downloads]')!
+    if (!dl.hasAttribute('hidden')) expect(dl.querySelector('[data-downloads-count]')!.text.trim()).not.toBe('')
     expect(h.querySelector('#download')).toBeTruthy()
     expect(h.querySelector('#share')).toBeTruthy()
     const tracks = h.querySelectorAll('a[data-track]').map(a => a.getAttribute('data-track'))
@@ -109,13 +114,13 @@ test('GoatCounter tag on both pages, loaded async, no other third-party script',
   for (const p of ['', 'tr']) {
     const tag = load(p).querySelector('script[data-goatcounter]')!
     expect(tag.getAttribute('data-goatcounter')).toBe('https://patchdrop.goatcounter.com/count')
-    expect(tag.getAttribute('src')).toBe('//gc.zgo.at/count.js')
+    expect(tag.getAttribute('src')).toBe('https://gc.zgo.at/count.js')
     expect(tag.hasAttribute('async')).toBe(true)
     const html = readFileSync(`dist/${p}/index.html`.replace('//', '/'), 'utf8')
     expect(html.indexOf('window.goatcounter={no_onload:true}')).toBeGreaterThan(-1)
     expect(html.indexOf('window.goatcounter={no_onload:true}')).toBeLessThan(html.indexOf('gc.zgo.at/count.js'))
     const external = load(p).querySelectorAll('script[src]').map((s) => s.getAttribute('src')).filter((s) => /^(https?:)?\/\//.test(s!))
-    expect(external).toEqual(['//gc.zgo.at/count.js'])
+    expect(external).toEqual(['https://gc.zgo.at/count.js'])
   }
 })
 test('language switch links carry lang tracking names', () => {
@@ -126,7 +131,22 @@ test('language switch links carry lang tracking names', () => {
 test('404 pages keep count.js own page view: tag present, no no_onload script', () => {
   for (const f of ['dist/404.html', 'dist/tr/404/index.html']) {
     const html = readFileSync(f, 'utf8')
-    expect(html).toContain('//gc.zgo.at/count.js')
+    expect(html).toContain('src="https://gc.zgo.at/count.js"')
     expect(html).not.toContain('no_onload')
+    expect(html).not.toContain('data-platform-detect')
   }
+})
+
+test('English 404 sends /tr/… paths to the Turkish 404; Turkish 404 does not redirect', () => {
+  const script = parse(readFileSync('dist/404.html', 'utf8')).querySelector('head script[data-tr-404]')!
+  expect(script.text).toBe("if(location.pathname.indexOf('/tr/')===0)location.replace('/tr/404/')")
+  const run = (pathname: string) => {
+    let target: string | null = null
+    new Function('location', script.text)({ pathname, replace: (u: string) => { target = u } })
+    return target
+  }
+  expect(run('/tr/nope')).toBe('/tr/404/')
+  expect(run('/nope')).toBeNull()
+  expect(run('/tracks')).toBeNull()
+  expect(readFileSync('dist/tr/404/index.html', 'utf8')).not.toContain('data-tr-404')
 })

@@ -1,6 +1,6 @@
 ---
 import type { Dict, Lang } from '../i18n/types'
-import { ASSETS, downloadUrl, type ReleaseInfo } from '../lib/release'
+import { ASSETS, REPO, downloadUrl, type ReleaseInfo } from '../lib/release'
 import Icon from './Icon.astro'
 interface Props { t: Dict; lang: Lang; release: ReleaseInfo }
 const { t, lang, release } = Astro.props
@@ -64,7 +64,7 @@ const fileLabel = (kind: string, name: string) => [kind, mb(name)].filter(Boolea
     </div>
 
     <p class="dl-links">
-      <a href="https://github.com/enselcuk/patchdrop/releases/latest"><Icon name="doc" size={18} />{d.releaseNotes}</a>
+      <a href={`https://github.com/${REPO}/releases/latest`}><Icon name="doc" size={18} />{d.releaseNotes}</a>
       <a href={downloadUrl(ASSETS.sums)}><Icon name="shield" size={18} />{d.checksums}</a>
     </p>
   </div>

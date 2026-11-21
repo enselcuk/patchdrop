@@ -16,7 +16,6 @@ export function downloadUrl(name: string): string {
 
 export interface ReleaseInfo {
   version: string
-  publishedAt: string
   stars: number
   downloads: number
   sizes: Record<string, number>
@@ -43,6 +42,12 @@ export function parseLiveStats(repoJson: unknown, releasesJson: unknown): { star
   return out
 }
 
+// Falling back keeps the build green but freezes the baked-in version and sizes, so say why.
+function useFallback(reason: string): ReleaseInfo {
+  console.warn(`[release] using release-fallback.json (v${fallback.version}): ${reason}`)
+  return fallback
+}
+
 export async function getReleaseInfo(fetchFn: typeof fetch = fetch): Promise<ReleaseInfo> {
   const ctrl = new AbortController()
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS)
@@ -56,26 +61,27 @@ export async function getReleaseInfo(fetchFn: typeof fetch = fetch): Promise<Rel
       return res.json()
     }
     const [repo, releases] = await Promise.all([get(''), get('/releases?per_page=100')])
-    if (!Array.isArray(releases)) return fallback
-    const latest = releases.find((r) => isObj(r) && r.draft !== true)
-    if (!isObj(latest) || typeof latest.tag_name !== 'string' || !Array.isArray(latest.assets)) return fallback
+    if (!Array.isArray(releases)) return useFallback('releases response is not an array')
+    // Same pick as /releases/latest: newest release that is neither a draft nor a prerelease.
+    const latest = releases.find((r) => isObj(r) && r.draft !== true && r.prerelease !== true)
+    if (!isObj(latest) || typeof latest.tag_name !== 'string' || !Array.isArray(latest.assets))
+      return useFallback('no published, non-prerelease release with a tag and assets')
     const sizes: Record<string, number> = {}
     for (const name of Object.values(ASSETS)) {
       const asset = latest.assets.find((a) => isObj(a) && a.name === name)
       const size = isObj(asset) ? num(asset.size) : undefined
-      if (size === undefined) return fallback
+      if (size === undefined) return useFallback(`${latest.tag_name} has no asset ${name}`)
       sizes[name] = size
     }
     const live = parseLiveStats(repo, releases)
     return {
       version: latest.tag_name.replace(/^v/, ''),
-      publishedAt: typeof latest.published_at === 'string' ? latest.published_at : fallback.publishedAt,
       stars: live.stars ?? 0,
       downloads: live.downloads ?? 0,
       sizes,
     }
-  } catch {
-    return fallback
+  } catch (err) {
+    return useFallback(err instanceof Error ? err.message : String(err))
   } finally {
     clearTimeout(timer)
   }

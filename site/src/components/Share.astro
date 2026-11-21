@@ -1,6 +1,7 @@
 ---
 import type { Dict, Lang } from '../i18n/types'
 import { shareLinks } from '../lib/share'
+import { REPO } from '../lib/release'
 import Icon from './Icon.astro'
 interface Props { t: Dict; lang: Lang }
 const { t, lang } = Astro.props
@@ -34,7 +35,7 @@ const nets = [
       </div>
       <p class="visually-hidden" role="status" aria-live="polite" data-share-status></p>
       <p class="share__star">
-        <a class="btn btn--secondary" href="https://github.com/enselcuk/patchdrop" data-track="star-share">
+        <a class="btn btn--secondary" href={`https://github.com/${REPO}`} data-track="star-share">
           <Icon name="star" />{t.hero.star}
         </a>
       </p>

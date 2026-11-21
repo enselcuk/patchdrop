@@ -15,7 +15,6 @@ const tr: Dict = {
   },
   nav: {
     how: 'Nasıl çalışır',
-    features: 'Özellikler',
     download: 'İndir',
     faq: 'SSS',
     github: 'GitHub',
@@ -65,7 +64,7 @@ const tr: Dict = {
     sub: 'Küçük bir uygulama, tek işi iyi yapar.',
     items: [
       { title: 'Kablo hızında', text: 'Dosyalar doğrudan ofis ağınızdan, kablonun izin verdiği en yüksek hızla gider.' },
-      { title: 'Şifreli, doğrulanmış cihazlar', text: 'Her aktarım TLS 1.3 ile şifrelenir. Her bilgisayarın kendi sertifikası vardır; sertifika beklenenle eşleşmezse PatchDrop göndermez.' },
+      { title: 'Şifreli aktarım', text: 'Her aktarım TLS 1.3 ile şifrelenir. Her bilgisayarın kendi sertifikası vardır; sertifika beklenenle eşleşmezse PatchDrop göndermez.' },
       { title: 'İnternet ve bulut yok', text: 'Hiçbir şey ağınızın dışına çıkmaz. İnternet kesikken bile çalışır.' },
       { title: 'Klasörün tamamı', text: 'Bir klasör gönderin, alt klasörleriyle birlikte olduğu gibi ulaşsın.' },
       { title: 'Mac + Windows', text: 'Intel ve Apple Silicon Mac’ler, Windows 10 ve 11. Hangi yönde olursa olsun.' },
@@ -93,7 +92,7 @@ const tr: Dict = {
     macSteps: [
       '.dmg dosyasını açın ve PatchDrop’u Uygulamalar klasörüne sürükleyin.',
       'PatchDrop’u bir kez açın. macOS engellediğinde Bitti’ye tıklayın.',
-      'Sistem Ayarları → Gizlilik ve Güvenlik bölümüne gidin.',
+      'Sistem Ayarları → Gizlilik ve Güvenlik bölümüne gidin (macOS 12’de: Sistem Tercihleri → Güvenlik ve Gizlilik → Yine de Aç).',
       'Aşağı kaydırıp PatchDrop’un yanındaki Yine de Aç’a tıklayın ve onaylayın. Sorulursa yerel ağ erişimine izin verin.',
     ],
     macFigure: 'Gizlilik ve Güvenlik',
