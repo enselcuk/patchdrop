@@ -112,3 +112,7 @@ internal/client           sender (pinned TLS, streaming upload)
 internal/node             glues it all together; favorites, scan, transfers
 frontend/src              Svelte 5 UI
 ```
+
+## License
+
+MIT. See [LICENSE](LICENSE).
