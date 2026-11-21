@@ -4,6 +4,10 @@ Fast file and folder sharing between computers on the same local network,
 built for **wired (Ethernet) office networks** where LocalSend-style discovery
 often fails. Works on macOS and Windows. No internet, no accounts, no cloud.
 
+Website and downloads: <https://patchdrop.enginsistem.com>
+
+**Beta: tested in our office on Mac and Windows.**
+
 ## Why it works on wired networks
 
 LocalSend announces itself with a single multicast packet that the OS sends out
@@ -17,19 +21,20 @@ switches drop multicast (IGMP snooping). PatchDrop instead:
 3. Has **Add by IP** (saved as a favorite) and **Scan network** (probes the
    subnet directly) for networks where broadcast is blocked too.
 
-Transfers are HTTPS with **mutual TLS**. Each device has a self-signed
-certificate, and its fingerprint is pinned, so another machine on the LAN cannot
-impersonate a coworker. See [PROTOCOL.md](PROTOCOL.md).
+Transfers are encrypted (TLS 1.3). Each device has its own certificate, and
+PatchDrop refuses to send when a device's certificate doesn't match the one it
+expects. See [PROTOCOL.md](PROTOCOL.md).
 
 ## Install
 
-Grab the builds from `build/bin/`:
+Download from <https://patchdrop.enginsistem.com> or the
+[latest release](https://github.com/enselcuk/patchdrop/releases/latest). Requires macOS 12 or later, or Windows 10/11.
 
 | OS      | File                    | Notes |
 |---------|-------------------------|-------|
-| macOS   | `PatchDrop.app` (Intel + Apple Silicon) | Copy to /Applications. First launch: right-click → **Open** (the app is not notarized). Allow **Local Network** access when asked. |
-| Windows | `PatchDrop-Setup-0.1.0-amd64.exe` (installer) | Installs to Program Files with Start menu and desktop shortcuts, adds the firewall rule for Private/Domain networks, and installs WebView2 if missing. Uninstall from Settings → Apps. |
-| Windows | `PatchDrop.exe` (portable) | Needs the WebView2 runtime (preinstalled on Windows 10/11). When the firewall asks, allow **Private networks**. |
+| macOS   | `PatchDrop-macOS.dmg` (Intel + Apple Silicon) | Copy to /Applications. The app is not notarized, so on first launch open System Settings → Privacy & Security → **Open Anyway**. Allow **Local Network** access when asked. |
+| Windows | `PatchDrop-Windows-Setup-x64.exe` (installer) | Installs to Program Files with Start menu and desktop shortcuts, adds the firewall rule for Private/Domain networks, and installs WebView2 if missing. Uninstall from Settings → Apps. |
+| Windows | `PatchDrop-Windows-x64.zip` (portable) | Needs the WebView2 runtime (preinstalled on Windows 10/11). When the firewall asks, allow **Private networks**. |
 
 ### Firewall (if devices don't see each other)
 
@@ -74,7 +79,7 @@ $APP receive                            # headless receiver, accepts everything
 
 ## Develop
 
-Requirements: Go 1.24+, Node 20+, Wails v2 (`go install github.com/wailsapp/wails/v2/cmd/wails@latest`).
+Requirements: Go 1.26+, Node 20+, Wails v2 (`go install github.com/wailsapp/wails/v2/cmd/wails@latest`).
 
 ```bash
 wails dev                                   # live-reload dev mode
@@ -90,7 +95,7 @@ once to fill in `wails_tools.nsh` and download the WebView2 bootstrapper. Homebr
 ```bash
 docker run --rm -v "$PWD/build:/build" -w /build/windows/installer debian:stable-slim \
   sh -c 'apt-get update -qq && apt-get install -y -qq nsis && makensis -DARG_WAILS_AMD64_BINARY=/build/bin/PatchDrop.exe project.nsi'
-# → build/bin/PatchDrop-Setup-<version>-amd64.exe
+# → build/bin/PatchDrop-Windows-Setup-x64.exe
 ```
 
 Run two instances on one machine for testing:
@@ -115,4 +120,4 @@ frontend/src              Svelte 5 UI
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT, © 2026 Engin Tasarım Ltd. Şti. See [LICENSE](LICENSE).

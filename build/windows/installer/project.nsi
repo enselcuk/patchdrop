@@ -35,6 +35,7 @@ Unicode true
 ####
 ## Include the wails tools
 ####
+!define INFO_COPYRIGHT "Copyright (c) 2026 Engin Tasarim Ltd. Sti." # ASCII override: NSIS rejects non-ASCII in wails_tools.nsh
 !include "wails_tools.nsh"
 
 # The version information for this two must consist of 4 parts
@@ -74,7 +75,7 @@ ManifestDPIAware true
 #!finalize 'signtool --file "%1"'
 
 Name "${INFO_PRODUCTNAME}"
-OutFile "..\..\bin\${INFO_PRODUCTNAME}-Setup-${INFO_PRODUCTVERSION}-${ARCH}.exe" # Name of the installer's file.
+OutFile "..\..\bin\${INFO_PRODUCTNAME}-Windows-Setup-x64.exe" # Name of the installer's file.
 !ifdef WAILS_INSTALL_SCOPE
   !if "${WAILS_INSTALL_SCOPE}" == "user"
     InstallDir "$LOCALAPPDATA\Programs\${INFO_PRODUCTNAME}"

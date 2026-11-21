@@ -7,14 +7,14 @@
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
   "author": {
-    "name": "Selcuk Engin",
+    "name": "Engin Tasarım Ltd. Şti.",
     "email": "info@engintasarim.com"
   },
   "info": {
     "companyName": "PatchDrop",
     "productName": "PatchDrop",
     "productVersion": "0.1.0",
-    "copyright": "Copyright (c) 2026 Selcuk Engin",
+    "copyright": "Copyright (c) 2026 Engin Tasarım Ltd. Şti.",
     "comments": "LAN file sharing for wired networks"
   }
 }
