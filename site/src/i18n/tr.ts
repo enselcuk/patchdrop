@@ -40,7 +40,7 @@ const tr: Dict = {
     mobileNote: 'PatchDrop, Mac ve Windows’ta çalışır. İndirmek için bu sayfayı bilgisayarınızda açın.',
     sendToComputer: 'Bağlantıyı bilgisayarıma gönder',
     screenshotAlt:
-      'PatchDrop penceresi: cihaz listesinde iki ofis bilgisayarı, Muhasebe-Mac ve Tasarım-PC, yanında dosyaları bırakma alanı.',
+      'Mac’te PatchDrop penceresi: cihaz listesinde ofisteki iki Mac, Muhasebe-Mac ve Tasarım-Mac, yanında dosyaları bırakma alanı.',
   },
   why: {
     eyebrow: 'Neden PatchDrop',
@@ -65,7 +65,7 @@ const tr: Dict = {
     sub: 'Küçük bir uygulama, tek işi iyi yapar.',
     items: [
       { title: 'Kablo hızında', text: 'Dosyalar doğrudan ofis ağınızdan, kablonun izin verdiği en yüksek hızla gider.' },
-      { title: 'Şifreli, doğrulanmış cihazlar', text: 'Her aktarım şifrelenir. Her bilgisayarın kendi sertifikası vardır; kimse bir iş arkadaşınızın yerine geçemez.' },
+      { title: 'Şifreli, doğrulanmış cihazlar', text: 'Her aktarım TLS 1.3 ile şifrelenir. Her bilgisayarın kendi sertifikası vardır; sertifika beklenenle eşleşmezse PatchDrop göndermez.' },
       { title: 'İnternet ve bulut yok', text: 'Hiçbir şey ağınızın dışına çıkmaz. İnternet kesikken bile çalışır.' },
       { title: 'Klasörün tamamı', text: 'Bir klasör gönderin, alt klasörleriyle birlikte olduğu gibi ulaşsın.' },
       { title: 'Mac + Windows', text: 'Intel ve Apple Silicon Mac’ler, Windows 10 ve 11. Hangi yönde olursa olsun.' },
@@ -77,7 +77,7 @@ const tr: Dict = {
     version: 'Sürüm',
     mac: {
       name: 'macOS',
-      req: 'macOS 11 ve üstü · Intel ve Apple Silicon',
+      req: 'macOS 12 ve üstü · Intel ve Apple Silicon',
       primary: '.dmg indir',
       secondary: 'Universal .zip',
     },
@@ -123,7 +123,7 @@ const tr: Dict = {
       },
       {
         q: 'Güvenli mi?',
-        a: 'Aktarımlar TLS 1.3 ile şifrelenir ve iki bilgisayar da kendi sertifikasıyla kimliğini kanıtlar. Karşıdaki kişi “Accept” düğmesine tıklamadan hiçbir dosya alınmaz; tabii sizden gelenleri her zaman kabul etmeyi seçmediyse.',
+        a: 'Aktarımlar TLS 1.3 ile şifrelenir ve her bilgisayarın kendi sertifikası vardır. PatchDrop göndermeden önce karşı bilgisayarın sertifikasının beklenenle eşleştiğini kontrol eder; eşleşmezse durur. Karşıdaki kişi “Accept” düğmesine tıklamadan hiçbir dosya alınmaz; tabii sizden gelenleri her zaman kabul etmeyi seçmediyse.',
       },
       {
         q: 'Bilgisayarlar birbirini görmüyor. Ne yapmalıyım?',

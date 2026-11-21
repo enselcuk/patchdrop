@@ -38,7 +38,7 @@ const en = {
     mobileNote: 'PatchDrop runs on Mac and Windows. Open this page on your computer to download it.',
     sendToComputer: 'Send link to my computer',
     screenshotAlt:
-      'The PatchDrop window: two office computers, Accounts-Mac and Design-PC, in the device list next to a drop area for files.',
+      'The PatchDrop window on a Mac: two other office Macs, Accounts-Mac and Design-Mac, in the device list next to a drop area for files.',
   },
   why: {
     eyebrow: 'Why PatchDrop',
@@ -63,7 +63,7 @@ const en = {
     sub: 'Small app, does one job well.',
     items: [
       { title: 'Full cable speed', text: 'Files go straight across your office network, as fast as the cable allows.' },
-      { title: 'Encrypted, verified devices', text: 'Every transfer is encrypted, and each computer has its own certificate, so nobody can pose as a coworker.' },
+      { title: 'Encrypted, verified devices', text: 'Every transfer is encrypted with TLS 1.3. Each computer has its own certificate, and PatchDrop won’t send if it doesn’t match the one it expects.' },
       { title: 'No internet, no cloud', text: 'Nothing leaves your network. It even works when the internet is down.' },
       { title: 'Whole folders', text: 'Send a folder and it arrives with all its subfolders in place.' },
       { title: 'Mac + Windows', text: 'Intel and Apple Silicon Macs, Windows 10 and 11, in any direction.' },
@@ -75,7 +75,7 @@ const en = {
     version: 'Version',
     mac: {
       name: 'macOS',
-      req: 'macOS 11 or later · Intel and Apple Silicon',
+      req: 'macOS 12 or later · Intel and Apple Silicon',
       primary: 'Download .dmg',
       secondary: 'Universal .zip',
     },
@@ -121,7 +121,7 @@ const en = {
       },
       {
         q: 'Is it safe?',
-        a: 'Transfers are encrypted with TLS 1.3, and both computers prove who they are with their own certificate. Nothing is accepted until the person at the other computer clicks Accept, unless they chose to always accept from you.',
+        a: 'Transfers are encrypted with TLS 1.3, and each computer has its own certificate. Before sending, PatchDrop checks that the other computer’s certificate matches the one it expects, and stops if it doesn’t. Nothing is accepted until the person at the other computer clicks Accept, unless they chose to always accept from you.',
       },
       {
         q: 'The computers don’t see each other. What now?',
