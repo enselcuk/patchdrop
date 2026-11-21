@@ -257,6 +257,7 @@ test('beta bar links to GitHub issues', () => expect(load('').querySelector('[da
   - **Hero:** renders all four `data-hero-platform` blocks. Only `other`, with both buttons, is visible without JS.
   - **Download section:** shows sizes from `ReleaseInfo.sizes` in MB, macOS first-launch steps (Open Anyway) and Windows SmartScreen steps (More info → Run anyway), plus links to the release notes (`https://github.com/enselcuk/patchdrop/releases/latest`) and `SHA256SUMS.txt`.
   - **FAQ:** uses `<details>` items. It includes the troubleshooting answer (firewall, Ethernet set to Private, Add by IP, Scan network, ports UDP 47820 / TCP 47821), "Why not LocalSend?" crediting LocalSend respectfully, and the GoatCounter privacy line.
+  - **Layout:** responsive from 360 px; any animation is disabled under `prefers-reduced-motion: reduce`; the screenshot uses `loading="lazy"` except in the hero; Manrope via `@fontsource-variable/manrope` (latin + latin-ext subsets, for Turkish characters).
   - **Copy rules:** write both languages natively, with no literal translation. The TR headline is exactly "Kablo üzerinden, bir sürükle-bırak uzaklıkta." and the bio is the spec's proposal.
 - [ ] **Step 5:** Run `npm run build && npm run test:dist && npx astro check`. Expected: PASS, 0 errors.
 - [ ] **Step 6: Commit:** `git commit -m "site: page sections, copy, assets, 404"`
