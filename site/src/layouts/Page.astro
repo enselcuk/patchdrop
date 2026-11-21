@@ -1,0 +1,18 @@
+---
+interface Props {
+  lang: 'en' | 'tr'
+  path: '/' | '/tr/'
+}
+const { lang } = Astro.props
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PatchDrop</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

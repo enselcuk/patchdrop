@@ -6,3 +6,6 @@ frontend/dist/*
 .DS_Store
 build/windows/installer/tmp/
 .superpowers/
+site/node_modules/
+site/dist/
+site/.astro/

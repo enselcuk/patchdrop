@@ -1,0 +1,22 @@
+{
+  "name": "patchdrop-site",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run --exclude tests/dist.test.ts",
+    "test:dist": "vitest run tests/dist.test.ts"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "node-html-parser": "^9.0.7",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.12"
+  }
+}
