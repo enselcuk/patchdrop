@@ -366,6 +366,7 @@ test('trackEvent calls count with event:true', () => { const count = vi.fn(); tr
 - [ ] **Step 3:** Make the repo public: `gh repo edit enselcuk/patchdrop --visibility public --accept-visibility-change-consequences`.
 - [ ] **Step 4:** Turn on Pages with Actions as the source: `gh api -X POST repos/enselcuk/patchdrop/pages -f build_type=workflow`. Allow release-tag deploys: `gh api -X POST repos/enselcuk/patchdrop/environments/github-pages/deployment-branch-policies -f name='v*' -f type=tag`. Push `main`, and confirm the `site` workflow succeeds.
 - [ ] **Step 5:** Selçuk adds DNS `CNAME patchdrop → enselcuk.github.io`. Then run `gh api -X PUT repos/enselcuk/patchdrop/pages -f cname=patchdrop.enginsistem.com`. Once the certificate is issued, run `-F https_enforced=true`. Set the repo homepage: `gh repo edit --homepage https://patchdrop.enginsistem.com`.
+- [ ] **Step 5b:** Selçuk creates the GoatCounter account and picks the site code. If it isn't `patchdrop`, update `GOATCOUNTER_CODE` in `site/src/config.ts`, commit and push. Do this before Step 6 and before any post goes out.
 - [ ] **Step 6:** Verify on the live site:
   - both languages and the TR redirect
   - every download link returns 200 after redirects
