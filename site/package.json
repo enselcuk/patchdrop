@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "check": "astro check",
+    "build": "astro check && astro build",
     "preview": "astro preview",
     "test": "vitest run --exclude tests/dist.test.ts",
     "test:dist": "vitest run tests/dist.test.ts"
