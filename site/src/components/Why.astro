@@ -1,0 +1,55 @@
+---
+import type { Dict } from '../i18n/types'
+import Icon from './Icon.astro'
+interface Props { t: Dict }
+const { t } = Astro.props
+const w = t.why
+---
+<section class="section why" id="why" aria-labelledby="why-title">
+  <div class="container why__inner">
+    <div class="why__head">
+      <span class="eyebrow">{w.eyebrow}</span>
+      <h2 id="why-title">{w.title}</h2>
+    </div>
+    <div class="why__body">
+      {w.paragraphs.map((p, i) => (
+        <p class={i === w.paragraphs.length - 1 ? 'why__credit' : undefined}>
+          {i === w.paragraphs.length - 1 && <Icon name="heart" size={20} />}
+          <span>{p}</span>
+        </p>
+      ))}
+    </div>
+    <div class="why__diagram" aria-hidden="true">
+      <div class="why__node"><Icon name="laptop" size={28} /></div>
+      <div class="why__cable"><Icon name="plug" size={20} /></div>
+      <div class="why__node"><Icon name="laptop" size={28} /></div>
+    </div>
+  </div>
+</section>
+<style>
+  .why__inner { display: grid; gap: 28px 64px; grid-template-columns: 1fr; }
+  .why__body { display: grid; gap: 18px; color: var(--muted); font-size: 1.125rem; }
+  .why__credit {
+    display: flex; gap: 12px; align-items: flex-start; padding: 16px 18px; border-radius: 14px;
+    background: var(--bg-tint); color: var(--ink); font-size: 1rem;
+  }
+  .why__credit :global(svg) { flex: none; color: var(--accent-2); margin-top: 3px; }
+  .why__diagram { display: flex; align-items: center; justify-content: center; gap: 0; }
+  .why__node {
+    display: grid; place-items: center; width: 64px; height: 64px; border-radius: 18px;
+    background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); color: var(--ink);
+  }
+  .why__cable {
+    position: relative; display: grid; place-items: center; width: 140px; height: 64px; color: var(--link);
+  }
+  .why__cable::before {
+    content: ''; position: absolute; inset: 50% 0 auto; height: 3px; transform: translateY(-50%);
+    background: var(--grad); border-radius: 3px;
+  }
+  .why__cable :global(svg) { position: relative; background: #fff; border-radius: 999px; padding: 6px; width: 34px; height: 34px; border: 2px solid currentColor; }
+  @media (min-width: 900px) {
+    .why__inner { grid-template-columns: 5fr 7fr; align-items: start; }
+    .why__diagram { grid-column: 1; grid-row: 2; justify-content: flex-start; margin-top: -8px; }
+    .why__body { grid-column: 2; grid-row: 1 / span 2; }
+  }
+</style>

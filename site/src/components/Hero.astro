@@ -1,0 +1,133 @@
+---
+import { Image } from 'astro:assets'
+import type { Dict, Lang } from '../i18n/types'
+import { ASSETS, downloadUrl, formatCount, type ReleaseInfo } from '../lib/release'
+import Icon from './Icon.astro'
+import shotEn from '../assets/screenshot-en.png'
+import shotTr from '../assets/screenshot-tr.png'
+interface Props { t: Dict; lang: Lang; release: ReleaseInfo }
+const { t, lang, release } = Astro.props
+const h = t.hero
+const shot = lang === 'tr' ? shotTr : shotEn
+const repo = 'https://github.com/enselcuk/patchdrop'
+const version = `v${release.version} ${h.beta}`
+// Keep hyphenated words ("sürükle-bırak") from breaking at the hyphen.
+const words = (text: string) => text.split(' ').map((w) => ({ w, keep: w.includes('-') }))
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero__inner">
+    <h1 id="hero-title">
+      {h.titleLead} <span class="hero__accent">{words(h.titleAccent).map(({ w, keep }, i) => (
+        <>{i > 0 && ' '}{keep ? <span class="nowrap">{w}</span> : w}</>
+      ))}</span>
+    </h1>
+    <p class="hero__lead">{h.lead}</p>
+
+    <div class="hero__cta">
+      <div class="hero__platform" data-hero-platform data-for="mac" hidden>
+        <a class="btn btn--primary" href={downloadUrl(ASSETS.macDmg)} data-track="download-mac-dmg">
+          <Icon name="download" />{h.downloadMac}
+        </a>
+        <p class="hero__meta"><a href="#download">{h.alsoWindows}</a> · {h.free} · {version}</p>
+      </div>
+      <div class="hero__platform" data-hero-platform data-for="windows" hidden>
+        <a class="btn btn--primary" href={downloadUrl(ASSETS.winSetup)} data-track="download-win-setup">
+          <Icon name="download" />{h.downloadWindows}
+        </a>
+        <p class="hero__meta"><a href="#download">{h.alsoMac}</a> · {h.free} · {version}</p>
+      </div>
+      <div class="hero__platform" data-hero-platform data-for="other">
+        <a class="btn btn--primary" href={downloadUrl(ASSETS.macDmg)} data-track="download-mac-dmg">
+          <Icon name="download" />{h.downloadMac}
+        </a>
+        <a class="btn btn--primary" href={downloadUrl(ASSETS.winSetup)} data-track="download-win-setup">
+          <Icon name="download" />{h.downloadWindows}
+        </a>
+        <p class="hero__meta">{h.otherNote} · {h.free} · {version}</p>
+      </div>
+      <div class="hero__platform" data-hero-platform data-for="mobile" hidden>
+        <p class="hero__mobile"><Icon name="laptop" size={22} />{h.mobileNote}</p>
+        <a class="btn btn--primary" href="#share" data-track="send-to-computer">
+          <Icon name="arrow" />{h.sendToComputer}
+        </a>
+        <p class="hero__meta">{h.free} · {version}</p>
+      </div>
+
+      <a class="btn btn--secondary hero__star" href={repo} data-track="star-hero">
+        <Icon name="star" />{h.star}
+        <span class="hero__count"><span class="visually-hidden">{h.starsLabel}: </span><span data-stars>{formatCount(release.stars, lang)}</span></span>
+      </a>
+      <p class="hero__downloads" data-downloads hidden>
+        <span data-downloads-count>{formatCount(release.downloads, lang)}</span> {h.downloads}
+      </p>
+    </div>
+
+    <div class="hero__shot">
+      <Image
+        src={shot}
+        alt={h.screenshotAlt}
+        widths={[480, 760, 980, 1960]}
+        sizes="(min-width: 1060px) 980px, calc(100vw - 40px)"
+        format="webp"
+        quality={82}
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+  </div>
+</section>
+<style>
+  .hero {
+    background:
+      radial-gradient(60% 50% at 50% 0%, #7a5cff14, transparent 70%),
+      linear-gradient(180deg, #fff 0%, var(--bg-soft) 100%);
+    padding-top: clamp(48px, 9vw, 96px);
+    overflow: hidden;
+  }
+  .hero__inner { text-align: center; }
+  h1 { font-size: clamp(2.25rem, 7vw, 4rem); letter-spacing: -0.035em; max-width: 15em; margin-inline: auto; }
+  .hero__accent {
+    display: block;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    padding-bottom: 0.06em;
+  }
+  .nowrap { white-space: nowrap; }
+  .hero__lead { max-width: 36em; margin: 20px auto 0; font-size: clamp(1.0625rem, 2.2vw, 1.25rem); color: var(--muted); }
+
+  .hero__cta {
+    display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+    gap: 12px; margin-top: 32px;
+  }
+  .hero__platform { display: contents; }
+  .hero__star { order: 1; }
+  .hero__meta, .hero__downloads { order: 2; flex-basis: 100%; margin-top: 4px; font-size: 0.9375rem; color: var(--muted); }
+  .hero__downloads { order: 3; margin-top: -6px; }
+  .hero__mobile {
+    order: -1; flex-basis: 100%; display: flex; gap: 10px; align-items: flex-start; justify-content: center;
+    max-width: 30em; margin: 0 auto 6px; font-weight: 600; text-align: left;
+  }
+  .hero__mobile :global(svg) { flex: none; color: var(--link); margin-top: 2px; }
+  .hero__count {
+    margin-left: 2px; padding: 1px 9px; border-radius: 999px; background: var(--bg-soft);
+    font-size: 0.875rem; font-variant-numeric: tabular-nums;
+  }
+
+  .hero__shot {
+    width: min(100%, 980px);
+    margin: clamp(40px, 6vw, 64px) auto 0;
+    border-radius: 14px 14px 0 0;
+    overflow: hidden;
+    border: 1px solid #0b1b331f;
+    border-bottom: 0;
+    background: #fff;
+    box-shadow: 0 -2px 6px #0b1b330a, 0 -18px 50px -12px #2f6bff40;
+  }
+  .hero__shot :global(img) { width: 100%; }
+
+  @media (max-width: 480px) {
+    .hero__cta .btn { width: 100%; }
+  }
+</style>

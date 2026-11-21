@@ -1,0 +1,32 @@
+---
+import type { Dict } from '../i18n/types'
+interface Props { t: Dict }
+const { t } = Astro.props
+const h = t.how
+---
+<section class="section section--tint" id="how" aria-labelledby="how-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="how-title">{h.title}</h2>
+      <p>{h.sub}</p>
+    </div>
+    <ol class="steps">
+      {h.steps.map((s, i) => (
+        <li class="card step">
+          <span class="step__num" aria-hidden="true">{i + 1}</span>
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+<style>
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .step { padding: 26px 24px; }
+  .step__num {
+    display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 999px;
+    background: var(--grad); color: #fff; font-weight: 800; margin-bottom: 16px;
+  }
+  .step p { margin-top: 6px; color: var(--muted); font-size: 1rem; }
+</style>

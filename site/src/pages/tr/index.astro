@@ -1,4 +1,9 @@
 ---
 import Page from '../../layouts/Page.astro'
+import Home from '../../components/Home.astro'
+import { getReleaseInfo } from '../../lib/release'
+const release = await getReleaseInfo()
 ---
-<Page lang="tr" path="/tr/" />
+<Page lang="tr" path="/tr/">
+  <Home lang="tr" release={release} />
+</Page>

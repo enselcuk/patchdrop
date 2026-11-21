@@ -1,0 +1,70 @@
+---
+import { Image } from 'astro:assets'
+import type { Dict } from '../i18n/types'
+import Icon, { type IconName } from './Icon.astro'
+import photo from '../assets/selcuk.jpg'
+interface Props { t: Dict }
+const { t } = Astro.props
+const m = t.madeBy
+const person: { label: string; href: string; icon: IconName }[] = [
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/selcuk-engin/', icon: 'linkedin' },
+  { label: 'X', href: 'https://x.com/enselcuk', icon: 'x' },
+  { label: 'YouTube', href: 'https://www.youtube.com/@selcukengin', icon: 'youtube' },
+]
+const brand: { label: string; href: string; icon: IconName }[] = [
+  { label: 'X', href: 'https://x.com/enginsistem', icon: 'x' },
+  { label: 'Instagram', href: 'https://www.instagram.com/enginsistem/', icon: 'instagram' },
+  { label: 'YouTube', href: 'https://www.youtube.com/@enginsistem', icon: 'youtube' },
+]
+---
+<section class="section made" id="made-by" aria-labelledby="made-title">
+  <div class="container made__inner">
+    <Image class="made__photo" src={photo} alt={m.photoAlt} width={200} height={200} densities={[1, 2]} format="webp" quality={80} loading="lazy" />
+    <div class="made__text">
+      <span class="eyebrow">{m.eyebrow}</span>
+      <h2 id="made-title">{m.title}</h2>
+      <p class="made__bio">{m.bio}</p>
+      <a class="btn made__site" href="https://enginsistem.com/?utm_source=patchdrop">
+        <Icon name="globe" />{m.website}
+      </a>
+      <div class="made__groups">
+        <div>
+          <h3>{m.personLinks}</h3>
+          <ul class="made__links">
+            {person.map((l) => <li><a href={l.href}><Icon name={l.icon} size={18} />{l.label}</a></li>)}
+          </ul>
+        </div>
+        <div>
+          <h3>{m.brandLinks}</h3>
+          <ul class="made__links">
+            {brand.map((l) => <li><a href={l.href}><Icon name={l.icon} size={18} />{l.label}</a></li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .made { background: var(--ink); color: #fff; }
+  .made .eyebrow { color: #8fb0ff; }
+  .made__inner { display: grid; gap: 32px; align-items: start; grid-template-columns: 1fr; }
+  .made__photo {
+    width: 160px; height: 160px; border-radius: 999px; object-fit: cover;
+    box-shadow: 0 0 0 4px #0b1b33, 0 0 0 7px #7a5cff;
+  }
+  .made__bio { margin-top: 16px; color: #c9d3e6; font-size: 1.125rem; max-width: 40em; }
+  .made__site { margin-top: 24px; background: #fff; color: var(--ink); }
+  .made__groups { display: flex; flex-wrap: wrap; gap: 20px 48px; margin-top: 32px; }
+  .made h3 { font-size: 0.8125rem; letter-spacing: 0.08em; text-transform: uppercase; color: #c9d3e6; font-weight: 800; }
+  .made__links { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .made__links a {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 14px; border-radius: 999px;
+    background: #ffffff1a; color: #fff; text-decoration: none; font-weight: 600; font-size: 0.9375rem;
+  }
+  .made__links a:hover { background: #ffffff2e; }
+  .made :focus-visible { outline-color: #8fb0ff; }
+  @media (min-width: 760px) {
+    .made__inner { grid-template-columns: 200px 1fr; gap: 56px; }
+    .made__photo { width: 200px; height: 200px; }
+  }
+</style>

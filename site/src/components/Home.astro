@@ -1,0 +1,38 @@
+---
+import type { Lang } from '../i18n/types'
+import { getDict } from '../lib/lang'
+import type { ReleaseInfo } from '../lib/release'
+import Hero from './Hero.astro'
+import Why from './Why.astro'
+import HowItWorks from './HowItWorks.astro'
+import Features from './Features.astro'
+import Download from './Download.astro'
+import Faq from './Faq.astro'
+import MadeBy from './MadeBy.astro'
+import Icon from './Icon.astro'
+interface Props { lang: Lang; release: ReleaseInfo }
+const { lang, release } = Astro.props
+const t = getDict(lang)
+---
+<Hero t={t} lang={lang} release={release} />
+<Why t={t} />
+<HowItWorks t={t} />
+<Features t={t} />
+<Download t={t} lang={lang} release={release} />
+{/* Share section: Task 6 replaces this with Share.astro (network links, copy link). */}
+<section class="section share-stub" id="share" aria-labelledby="share-title">
+  <div class="container section-head">
+    <h2 id="share-title">{t.share.title}</h2>
+    <p>
+      <a class="btn btn--secondary" href="https://github.com/enselcuk/patchdrop" data-track="star-share">
+        <Icon name="star" />{t.hero.star}
+      </a>
+    </p>
+  </div>
+</section>
+<Faq t={t} />
+<MadeBy t={t} />
+<style>
+  .share-stub .section-head { margin-bottom: 0; }
+  .share-stub p { margin-top: 20px; }
+</style>

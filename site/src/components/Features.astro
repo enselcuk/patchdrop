@@ -1,0 +1,32 @@
+---
+import type { Dict } from '../i18n/types'
+import Icon, { type IconName } from './Icon.astro'
+interface Props { t: Dict }
+const { t } = Astro.props
+const f = t.features
+const icons: IconName[] = ['bolt', 'lock', 'cloudOff', 'folder', 'laptop', 'heart']
+---
+<section class="section" id="features" aria-labelledby="features-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="features-title">{f.title}</h2>
+      <p>{f.sub}</p>
+    </div>
+    <ul class="features">
+      {f.items.map((item, i) => (
+        <li class="feature">
+          <span class="icon-badge"><Icon name={icons[i] ?? 'check'} size={22} /></span>
+          <div>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+<style>
+  .features { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
+  .feature { display: flex; gap: 16px; align-items: flex-start; padding: 22px; border-radius: var(--radius); background: var(--bg-tint); }
+  .feature p { margin-top: 4px; color: var(--muted); font-size: 1rem; }
+</style>

@@ -1,0 +1,38 @@
+---
+import type { Dict } from '../i18n/types'
+interface Props { t: Dict }
+const { t } = Astro.props
+---
+<section class="section section--tint" id="faq" aria-labelledby="faq-title">
+  <div class="container faq">
+    <div class="section-head">
+      <h2 id="faq-title">{t.faq.title}</h2>
+    </div>
+    <div class="faq__list">
+      {t.faq.items.map((item) => (
+        <details class="faq__item">
+          <summary><span>{item.q}</span></summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .faq__list { max-width: 760px; margin-inline: auto; display: grid; gap: 10px; }
+  .faq__item { border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+  .faq__item summary:hover { color: var(--link); }
+  .faq__item[open] { box-shadow: var(--shadow); }
+  summary {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 18px 20px; cursor: pointer; font-weight: 700; font-size: 1.0625rem; list-style: none; border-radius: 14px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: ''; flex: none; width: 10px; height: 10px; margin-right: 4px;
+    border-right: 2.5px solid var(--link); border-bottom: 2.5px solid var(--link);
+    transform: translateY(-3px) rotate(45deg); transition: transform 0.2s ease;
+  }
+  .faq__item[open] summary::after { transform: translateY(2px) rotate(-135deg); }
+  .faq__item p { padding: 0 20px 20px; color: var(--muted); font-size: 1rem; }
+</style>

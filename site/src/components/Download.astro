@@ -1,0 +1,102 @@
+---
+import type { Dict, Lang } from '../i18n/types'
+import { ASSETS, downloadUrl, type ReleaseInfo } from '../lib/release'
+import Icon from './Icon.astro'
+interface Props { t: Dict; lang: Lang; release: ReleaseInfo }
+const { t, lang, release } = Astro.props
+const d = t.download
+const mbFmt = new Intl.NumberFormat(lang, { maximumFractionDigits: 1, minimumFractionDigits: 1 })
+const mb = (name: string) => {
+  const bytes = release.sizes[name]
+  return typeof bytes === 'number' && bytes > 0 ? `${mbFmt.format(bytes / 1_000_000)} MB` : ''
+}
+const fileLabel = (kind: string, name: string) => [kind, mb(name)].filter(Boolean).join(' · ')
+---
+<section class="section section--tint" id="download" aria-labelledby="download-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="download-title">{d.title}</h2>
+      <p>{d.version} {release.version} · {t.hero.beta}</p>
+    </div>
+
+    <div class="dl-grid">
+      <article class="card dl" aria-labelledby="dl-mac">
+        <h3 id="dl-mac">{d.mac.name}</h3>
+        <p class="dl__req">{d.mac.req}</p>
+        <a class="btn btn--primary" href={downloadUrl(ASSETS.macDmg)} data-track="download-mac-dmg">
+          <Icon name="download" />{d.mac.primary}
+        </a>
+        <p class="dl__file">{fileLabel('.dmg', ASSETS.macDmg)}</p>
+        <p class="dl__alt">
+          {d.or} <a href={downloadUrl(ASSETS.macZip)} data-track="download-mac-zip">{d.mac.secondary}</a>
+          {mb(ASSETS.macZip) && <span> · {mb(ASSETS.macZip)}</span>}
+        </p>
+
+        <h4>{d.macTitle}</h4>
+        <p class="dl__intro">{d.macIntro}</p>
+        <ol class="dl__steps">{d.macSteps.map((s) => <li>{s}</li>)}</ol>
+        <figure class="mac-fig" aria-hidden="true">
+          <div class="mac-fig__bar"><span></span><span></span><span></span><b>{d.macFigure}</b></div>
+          <div class="mac-fig__body">
+            <Icon name="shield" size={22} />
+            <span>{d.macFigureText}</span>
+            <span class="mac-fig__btn">{d.macFigureButton}</span>
+          </div>
+        </figure>
+      </article>
+
+      <article class="card dl" aria-labelledby="dl-win">
+        <h3 id="dl-win">{d.windows.name}</h3>
+        <p class="dl__req">{d.windows.req}</p>
+        <a class="btn btn--primary" href={downloadUrl(ASSETS.winSetup)} data-track="download-win-setup">
+          <Icon name="download" />{d.windows.primary}
+        </a>
+        <p class="dl__file">{fileLabel('.exe', ASSETS.winSetup)}</p>
+        <p class="dl__alt">
+          {d.or} <a href={downloadUrl(ASSETS.winZip)} data-track="download-win-zip">{d.windows.secondary}</a>
+          {mb(ASSETS.winZip) && <span> · {mb(ASSETS.winZip)}</span>}
+        </p>
+
+        <h4>{d.winTitle}</h4>
+        <p class="dl__intro">{d.winIntro}</p>
+        <ol class="dl__steps">{d.winSteps.map((s) => <li>{s}</li>)}</ol>
+      </article>
+    </div>
+
+    <p class="dl-links">
+      <a href="https://github.com/enselcuk/patchdrop/releases/latest"><Icon name="doc" size={18} />{d.releaseNotes}</a>
+      <a href={downloadUrl(ASSETS.sums)}><Icon name="shield" size={18} />{d.checksums}</a>
+    </p>
+  </div>
+</section>
+<style>
+  .dl-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
+  .dl { padding: clamp(22px, 4vw, 32px); display: flex; flex-direction: column; align-items: flex-start; }
+  .dl h3 { font-size: 1.5rem; }
+  .dl__req { color: var(--muted); font-size: 0.9375rem; margin: 4px 0 20px; }
+  .dl__file { margin-top: 10px; font-size: 0.9375rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .dl__alt { font-size: 0.9375rem; color: var(--muted); }
+  .dl__alt a { font-weight: 700; }
+  .dl h4 {
+    margin: 28px 0 6px; padding-top: 22px; border-top: 1px solid var(--line); width: 100%;
+    font-size: 1rem; font-weight: 800;
+  }
+  .dl__intro { font-size: 0.9375rem; color: var(--muted); }
+  .dl__steps { margin: 10px 0 0; padding-left: 1.3em; display: grid; gap: 6px; font-size: 0.9375rem; }
+  .dl__steps li::marker { font-weight: 800; color: var(--link); }
+
+  .mac-fig { margin: 20px 0 0; width: 100%; border-radius: 12px; border: 1px solid var(--line); overflow: hidden; background: #fff; font-size: 0.8125rem; }
+  .mac-fig__bar { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: #f3f4f7; border-bottom: 1px solid var(--line); }
+  .mac-fig__bar span { width: 10px; height: 10px; border-radius: 50%; background: #d5d8df; }
+  .mac-fig__bar b { margin-left: 8px; font-weight: 700; }
+  .mac-fig__body { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 14px 12px; }
+  .mac-fig__body :global(svg) { color: var(--muted); }
+  .mac-fig__body > span:first-of-type { flex: 1; min-width: 12em; }
+  .mac-fig__btn {
+    padding: 4px 12px; border-radius: 7px; background: #fff; border: 1px solid #0b1b3333; font-weight: 700;
+    box-shadow: 0 0 0 3px #2f6bff59;
+  }
+
+  .dl-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 28px; margin-top: 28px; font-weight: 700; }
+  .dl-links a { display: inline-flex; align-items: center; gap: 8px; }
+</style>

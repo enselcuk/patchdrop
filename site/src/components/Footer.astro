@@ -1,0 +1,30 @@
+---
+import type { Dict, Lang } from '../i18n/types'
+import LangSwitch from './LangSwitch.astro'
+import Icon from './Icon.astro'
+interface Props { t: Dict; lang: Lang }
+const { t, lang } = Astro.props
+const f = t.footer
+const repo = 'https://github.com/enselcuk/patchdrop'
+---
+<footer class="footer">
+  <div class="container footer__inner">
+    <nav class="footer__links" aria-label={f.links}>
+      <a href={repo}><Icon name="github" size={16} />{f.github}</a>
+      <a href={`${repo}/issues`}>{f.bug}</a>
+      <a href={`${repo}/releases`}>{f.releases}</a>
+      <a href={`${repo}/blob/main/LICENSE`}>{f.license}</a>
+    </nav>
+    <LangSwitch lang={lang} />
+    <p class="footer__copy">{f.copyright}</p>
+  </div>
+</footer>
+<style>
+  .footer { background: var(--bg-tint); border-top: 1px solid var(--line); font-size: 0.9375rem; }
+  .footer__inner { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; padding-block: 28px; }
+  .footer__links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+  .footer__links a { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); font-weight: 600; text-decoration: none; padding-block: 6px; }
+  .footer__links a:hover { color: var(--link); text-decoration: underline; }
+  .footer__copy { margin-left: auto; color: var(--muted); }
+  @media (max-width: 640px) { .footer__copy { margin-left: 0; flex-basis: 100%; } }
+</style>

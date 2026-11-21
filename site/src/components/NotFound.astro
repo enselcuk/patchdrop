@@ -1,0 +1,25 @@
+---
+import type { Lang } from '../i18n/types'
+import { getDict } from '../lib/lang'
+import Icon from './Icon.astro'
+interface Props { lang: Lang }
+const { lang } = Astro.props
+const t = getDict(lang)
+---
+<section class="nf">
+  <div class="container nf__inner">
+    <p class="nf__code" aria-hidden="true">404</p>
+    <h1>{t.notFound.title}</h1>
+    <p class="nf__text">{t.notFound.description}</p>
+    <a class="btn btn--primary" href={lang === 'tr' ? '/tr/' : '/'}><Icon name="arrow" />{t.notFound.back}</a>
+  </div>
+</section>
+<style>
+  .nf { background: linear-gradient(180deg, #fff, var(--bg-soft)); padding-block: clamp(72px, 14vw, 160px); text-align: center; }
+  .nf__code {
+    font-size: clamp(4rem, 14vw, 7rem); font-weight: 800; line-height: 1; letter-spacing: -0.05em;
+    background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  h1 { font-size: clamp(1.75rem, 5vw, 2.5rem); margin-top: 12px; }
+  .nf__text { color: var(--muted); max-width: 32em; margin: 14px auto 28px; }
+</style>
