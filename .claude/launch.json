@@ -4,8 +4,20 @@
     {
       "name": "patchdrop-dev",
       "runtimeExecutable": "bash",
-      "runtimeArgs": ["-c", "PATCHDROP_PROFILE=gui PATH=$PATH:$HOME/go/bin wails dev -noreload"],
+      "runtimeArgs": [
+        "-c",
+        "PATCHDROP_PROFILE=gui PATH=$PATH:$HOME/go/bin wails dev -noreload"
+      ],
       "port": 34115
+    },
+    {
+      "name": "site-preview",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "cd site && npm run build && npx astro preview --port 4321"
+      ],
+      "port": 4321
     }
   ]
 }
