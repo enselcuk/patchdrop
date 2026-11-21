@@ -5,3 +5,4 @@ frontend/dist/*
 .claude/settings.local.json
 .DS_Store
 build/windows/installer/tmp/
+.superpowers/
