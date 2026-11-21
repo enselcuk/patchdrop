@@ -5,13 +5,13 @@
 !include "FileFunc.nsh"
 
 !ifndef INFO_PROJECTNAME
-    !define INFO_PROJECTNAME "localshare"
+    !define INFO_PROJECTNAME "PatchDrop"
 !endif
 !ifndef INFO_COMPANYNAME
-    !define INFO_COMPANYNAME "LocalShare"
+    !define INFO_COMPANYNAME "PatchDrop"
 !endif
 !ifndef INFO_PRODUCTNAME
-    !define INFO_PRODUCTNAME "LocalShare"
+    !define INFO_PRODUCTNAME "PatchDrop"
 !endif
 !ifndef INFO_PRODUCTVERSION
     !define INFO_PRODUCTVERSION "0.1.0"

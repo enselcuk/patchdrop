@@ -9,8 +9,8 @@ import (
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
-	"localshare/internal/node"
-	"localshare/internal/server"
+	"patchdrop/internal/node"
+	"patchdrop/internal/server"
 )
 
 // App is bound to the frontend; its exported methods are callable from JS.

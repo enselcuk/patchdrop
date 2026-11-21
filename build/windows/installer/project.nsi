@@ -30,8 +30,8 @@ Unicode true
 ####
 ## !define REQUEST_EXECUTION_LEVEL "admin"            # Default "admin"  see also https://nsis.sourceforge.io/Docs/Chapter4.html
 ####
-!define PRODUCT_EXECUTABLE "LocalShare.exe"
-!define FIREWALL_RULE "LocalShare"
+!define PRODUCT_EXECUTABLE "PatchDrop.exe"
+!define FIREWALL_RULE "PatchDrop"
 ####
 ## Include the wails tools
 ####

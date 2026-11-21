@@ -4,7 +4,7 @@ package discovery
 
 import "syscall"
 
-// reuseControl lets several LocalShare instances (or a restart) bind the
+// reuseControl lets several PatchDrop instances (or a restart) bind the
 // discovery port at once; broadcast datagrams are delivered to all of them.
 func reuseControl(network, address string, c syscall.RawConn) error {
 	var serr error

@@ -1,4 +1,4 @@
-// Package discovery finds other LocalShare devices on the LAN.
+// Package discovery finds other PatchDrop devices on the LAN.
 //
 // Every few seconds a JSON announce is sent on every usable IPv4 interface to
 // that interface's directed broadcast address (e.g. 192.168.1.255) and to a
@@ -19,8 +19,8 @@ import (
 
 	"golang.org/x/net/ipv4"
 
-	"localshare/internal/netif"
-	"localshare/internal/protocol"
+	"patchdrop/internal/netif"
+	"patchdrop/internal/protocol"
 )
 
 const (

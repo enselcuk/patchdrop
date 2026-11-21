@@ -1,4 +1,4 @@
-module localshare
+module patchdrop
 
 go 1.26.0
 

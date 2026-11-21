@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"localshare/internal/server"
+	"patchdrop/internal/server"
 )
 
 type recorder struct {

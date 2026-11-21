@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "localshare-dev",
+      "name": "patchdrop-dev",
       "runtimeExecutable": "bash",
-      "runtimeArgs": ["-c", "LOCALSHARE_PROFILE=gui PATH=$PATH:$HOME/go/bin wails dev -noreload"],
+      "runtimeArgs": ["-c", "PATCHDROP_PROFILE=gui PATH=$PATH:$HOME/go/bin wails dev -noreload"],
       "port": 34115
     }
   ]

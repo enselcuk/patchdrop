@@ -22,8 +22,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"localshare/internal/identity"
-	"localshare/internal/protocol"
+	"patchdrop/internal/identity"
+	"patchdrop/internal/protocol"
 )
 
 var (

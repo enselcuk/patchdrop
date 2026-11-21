@@ -15,13 +15,13 @@ import (
 	"sync"
 	"time"
 
-	"localshare/internal/client"
-	"localshare/internal/config"
-	"localshare/internal/discovery"
-	"localshare/internal/identity"
-	"localshare/internal/netif"
-	"localshare/internal/protocol"
-	"localshare/internal/server"
+	"patchdrop/internal/client"
+	"patchdrop/internal/config"
+	"patchdrop/internal/discovery"
+	"patchdrop/internal/identity"
+	"patchdrop/internal/netif"
+	"patchdrop/internal/protocol"
+	"patchdrop/internal/server"
 )
 
 const offerTimeout = 2 * time.Minute
@@ -246,7 +246,7 @@ func (n *Node) AddByAddress(ctx context.Context, addr string) (PeerView, error) 
 	}
 	info, err := n.cli.Info(ctx, client.Target{Host: host, Port: port})
 	if err != nil {
-		return PeerView{}, fmt.Errorf("could not reach %s:%d – is LocalShare running there and allowed through the firewall? (%v)", host, port, err)
+		return PeerView{}, fmt.Errorf("could not reach %s:%d – is PatchDrop running there and allowed through the firewall? (%v)", host, port, err)
 	}
 	if info.ID == n.info().ID {
 		return PeerView{}, errors.New("that address is this device")
@@ -392,7 +392,7 @@ func (n *Node) checkExtras(ctx context.Context) {
 }
 
 // Scan probes every address of each local subnet (max /22, otherwise the
-// surrounding /24) for a LocalShare server. Use it when broadcast is blocked.
+// surrounding /24) for a PatchDrop server. Use it when broadcast is blocked.
 func (n *Node) Scan(ctx context.Context) (int, error) {
 	self := n.info()
 	var hosts []string

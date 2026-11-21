@@ -10,15 +10,15 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 
-	"localshare/internal/node"
+	"patchdrop/internal/node"
 )
 
 //go:embed all:frontend/dist
 var assets embed.FS
 
 func main() {
-	opts := node.Options{Profile: os.Getenv("LOCALSHARE_PROFILE")}
-	if p, err := strconv.Atoi(os.Getenv("LOCALSHARE_PORT")); err == nil {
+	opts := node.Options{Profile: os.Getenv("PATCHDROP_PROFILE")}
+	if p, err := strconv.Atoi(os.Getenv("PATCHDROP_PORT")); err == nil {
 		opts.Port = p
 	}
 
@@ -27,7 +27,7 @@ func main() {
 	}
 
 	app := NewApp(opts)
-	title := "LocalShare"
+	title := "PatchDrop"
 	if opts.Profile != "" {
 		title += " (" + opts.Profile + ")"
 	}
@@ -47,7 +47,7 @@ func main() {
 			DisableWebViewDrop: true,
 		},
 		Mac: &mac.Options{
-			About: &mac.AboutInfo{Title: "LocalShare", Message: "Fast file sharing over your local network."},
+			About: &mac.AboutInfo{Title: "PatchDrop", Message: "Fast file sharing over your local network."},
 		},
 		Bind: []interface{}{app},
 	})

@@ -1,4 +1,4 @@
-# LocalShare protocol v1
+# PatchDrop protocol v1
 
 ## Identity
 
@@ -14,7 +14,7 @@ Every 3 s, a JSON datagram is sent on **each** usable IPv4 interface to:
 - multicast group `239.255.47.82:47820` (TTL 1), sent out of that interface
 
 ```json
-{"magic":"localshare","v":1,"id":"4905d93c5978ff4e","name":"Design-PC","os":"windows",
+{"magic":"patchdrop","v":1,"id":"4905d93c5978ff4e","name":"Design-PC","os":"windows",
  "port":47821,"fp":"6750…","link":"wired"}
 ```
 

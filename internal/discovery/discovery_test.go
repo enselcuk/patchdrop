@@ -4,7 +4,7 @@ import (
 	"net"
 	"testing"
 
-	"localshare/internal/protocol"
+	"patchdrop/internal/protocol"
 )
 
 func TestPrefersRoutableWiredAddress(t *testing.T) {

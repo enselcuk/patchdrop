@@ -63,7 +63,7 @@ func generate(certPath, keyPath string) error {
 	}
 	tmpl := &x509.Certificate{
 		SerialNumber:          serial,
-		Subject:               pkix.Name{CommonName: "LocalShare device"},
+		Subject:               pkix.Name{CommonName: "PatchDrop device"},
 		NotBefore:             time.Now().Add(-time.Hour),
 		NotAfter:              time.Now().AddDate(20, 0, 0),
 		KeyUsage:              x509.KeyUsageDigitalSignature,

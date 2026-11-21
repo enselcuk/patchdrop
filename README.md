@@ -1,4 +1,4 @@
-# LocalShare
+# PatchDrop
 
 Fast file and folder sharing between computers on the same local network,
 built for **wired (Ethernet) office networks** where LocalSend-style discovery
@@ -8,7 +8,7 @@ often fails. Works on macOS and Windows. No internet, no accounts, no cloud.
 
 LocalSend announces itself with a single multicast packet that the OS sends out
 of one "default" interface (often Wi-Fi, a VPN or a virtual adapter), and many
-switches drop multicast (IGMP snooping). LocalShare instead:
+switches drop multicast (IGMP snooping). PatchDrop instead:
 
 1. Sends a **directed broadcast** (e.g. `192.168.1.255`) on **every real
    interface**: Ethernet first, skipping VPN/Docker/VM adapters. Every switch
@@ -27,34 +27,34 @@ Grab the builds from `build/bin/`:
 
 | OS      | File                    | Notes |
 |---------|-------------------------|-------|
-| macOS   | `localshare.app` (Intel + Apple Silicon) | Copy to /Applications. First launch: right-click → **Open** (the app is not notarized). Allow **Local Network** access when asked. |
-| Windows | `LocalShare-Setup-0.1.0-amd64.exe` (installer) | Installs to Program Files with Start menu and desktop shortcuts, adds the firewall rule for Private/Domain networks, and installs WebView2 if missing. Uninstall from Settings → Apps. |
-| Windows | `LocalShare.exe` (portable) | Needs the WebView2 runtime (preinstalled on Windows 10/11). When the firewall asks, allow **Private networks**. |
+| macOS   | `PatchDrop.app` (Intel + Apple Silicon) | Copy to /Applications. First launch: right-click → **Open** (the app is not notarized). Allow **Local Network** access when asked. |
+| Windows | `PatchDrop-Setup-0.1.0-amd64.exe` (installer) | Installs to Program Files with Start menu and desktop shortcuts, adds the firewall rule for Private/Domain networks, and installs WebView2 if missing. Uninstall from Settings → Apps. |
+| Windows | `PatchDrop.exe` (portable) | Needs the WebView2 runtime (preinstalled on Windows 10/11). When the firewall asks, allow **Private networks**. |
 
 ### Firewall (if devices don't see each other)
 
-LocalShare uses **UDP 47820** (discovery) and **TCP 47821** (transfers).
+PatchDrop uses **UDP 47820** (discovery) and **TCP 47821** (transfers).
 
 Windows, in an admin PowerShell:
 
 ```powershell
-New-NetFirewallRule -DisplayName "LocalShare" -Direction Inbound -Program "C:\Path\To\LocalShare.exe" -Action Allow -Profile Private,Domain
+New-NetFirewallRule -DisplayName "PatchDrop" -Direction Inbound -Program "C:\Path\To\PatchDrop.exe" -Action Allow -Profile Private,Domain
 ```
 
 Also make sure the Ethernet network is set to **Private**, not Public
 (Settings → Network → Ethernet → Network profile type).
 
-macOS: System Settings → Network → Firewall → Options → allow LocalShare.
+macOS: System Settings → Network → Firewall → Options → allow PatchDrop.
 
 ## Use
 
-- Devices running LocalShare appear on the left. The plug icon means it was
+- Devices running PatchDrop appear on the left. The plug icon means it was
   reached over a wired link.
 - Drop files/folders on the window (or **Choose files / Choose folder**),
   select a device, click **Send**.
 - The receiver gets an Accept / Decline prompt. Tick **Always accept from this
   device** for trusted coworkers.
-- Received files go to `~/Downloads/LocalShare` (change it in Settings). Name
+- Received files go to `~/Downloads/PatchDrop` (change it in Settings). Name
   clashes become `file (1).ext`, so nothing is overwritten.
 - ★ a device to remember it even when discovery is unavailable.
 
@@ -63,7 +63,7 @@ macOS: System Settings → Network → Firewall → Options → allow LocalShare
 The same binary has a small CLI, handy for scripts and troubleshooting:
 
 ```bash
-APP=/Applications/localshare.app/Contents/MacOS/localshare
+APP=/Applications/PatchDrop.app/Contents/MacOS/PatchDrop
 $APP interfaces                         # which interfaces are used, wired/wifi
 $APP peers                              # list devices found in 8 s
 $APP send 192.168.1.24 ./report.pdf ./Photos
@@ -80,24 +80,24 @@ Requirements: Go 1.24+, Node 20+, Wails v2 (`go install github.com/wailsapp/wail
 wails dev                                   # live-reload dev mode
 go test ./internal/...                      # unit + loopback integration tests
 wails build -platform darwin/universal      # macOS app
-wails build -platform windows/amd64 -o LocalShare.exe   # Windows (cross-compiles from a Mac)
+wails build -platform windows/amd64 -o PatchDrop.exe   # Windows (cross-compiles from a Mac)
 ```
 
-Windows installer (NSIS). Run `wails build -platform windows/amd64 -nsis -o LocalShare.exe`
+Windows installer (NSIS). Run `wails build -platform windows/amd64 -nsis -o PatchDrop.exe`
 once to fill in `wails_tools.nsh` and download the WebView2 bootstrapper. Homebrew's
 `makensis` 3.13 crashes on macOS 27, so compile the installer with Linux NSIS in Docker:
 
 ```bash
 docker run --rm -v "$PWD/build:/build" -w /build/windows/installer debian:stable-slim \
-  sh -c 'apt-get update -qq && apt-get install -y -qq nsis && makensis -DARG_WAILS_AMD64_BINARY=/build/bin/LocalShare.exe project.nsi'
-# → build/bin/LocalShare-Setup-<version>-amd64.exe
+  sh -c 'apt-get update -qq && apt-get install -y -qq nsis && makensis -DARG_WAILS_AMD64_BINARY=/build/bin/PatchDrop.exe project.nsi'
+# → build/bin/PatchDrop-Setup-<version>-amd64.exe
 ```
 
 Run two instances on one machine for testing:
 
 ```bash
-LOCALSHARE_PROFILE=a wails dev
-LOCALSHARE_PROFILE=b LOCALSHARE_PORT=47831 ./build/bin/localshare.app/Contents/MacOS/localshare receive
+PATCHDROP_PROFILE=a wails dev
+PATCHDROP_PROFILE=b PATCHDROP_PORT=47831 ./build/bin/PatchDrop.app/Contents/MacOS/PatchDrop receive
 ```
 
 ### Layout

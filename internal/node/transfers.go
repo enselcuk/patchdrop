@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"localshare/internal/client"
-	"localshare/internal/server"
+	"patchdrop/internal/client"
+	"patchdrop/internal/server"
 )
 
 const (

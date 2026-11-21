@@ -36,14 +36,14 @@ type Store struct {
 	s    Settings
 }
 
-// Dir returns the config directory. A non-empty profile (LOCALSHARE_PROFILE)
+// Dir returns the config directory. A non-empty profile (PATCHDROP_PROFILE)
 // gives a separate directory, which allows running several instances on one machine.
 func Dir(profile string) (string, error) {
 	base, err := os.UserConfigDir()
 	if err != nil {
 		return "", err
 	}
-	name := "LocalShare"
+	name := "PatchDrop"
 	if profile != "" {
 		name += "-" + profile
 	}
@@ -76,7 +76,7 @@ func Load(dir string) (*Store, error) {
 	}
 	if st.s.DownloadDir == "" {
 		home, _ := os.UserHomeDir()
-		st.s.DownloadDir = filepath.Join(home, "Downloads", "LocalShare")
+		st.s.DownloadDir = filepath.Join(home, "Downloads", "PatchDrop")
 		changed = true
 	}
 	if changed {
@@ -90,7 +90,7 @@ func Load(dir string) (*Store, error) {
 func defaultName() string {
 	h, err := os.Hostname()
 	if err != nil || h == "" {
-		return "LocalShare device"
+		return "PatchDrop device"
 	}
 	h = strings.TrimSuffix(h, ".local")
 	h = strings.TrimSuffix(h, ".lan")

@@ -114,7 +114,7 @@
     scanning = true
     try {
       const n = await api.Scan()
-      toast(n === 0 ? 'No other LocalShare devices answered on this network.' : `Found ${n} device${n === 1 ? '' : 's'}`, n === 0 ? 'error' : 'info')
+      toast(n === 0 ? 'No other PatchDrop devices answered on this network.' : `Found ${n} device${n === 1 ? '' : 's'}`, n === 0 ? 'error' : 'info')
     } catch (e) {
       toast(errText(e))
     } finally {
@@ -158,14 +158,14 @@
 
 {#if fatal}
   <div class="fatal">
-    <h2>LocalShare could not start</h2>
+    <h2>PatchDrop could not start</h2>
     <p class="mono">{fatal}</p>
     <p class="muted">Another copy may already be running, or the network ports are blocked.</p>
   </div>
 {:else}
   <div class="shell">
     <header>
-      <div class="brand"><span class="logo"><Icon name="upload" size={16} /></span> LocalShare</div>
+      <div class="brand"><span class="logo"><Icon name="upload" size={16} /></span> PatchDrop</div>
       {#if self}
         <button class="me ghost" onclick={openSettings} title="Settings">
           <span class="dot"></span>
@@ -298,7 +298,7 @@
         </div>
         <p class="muted hint">
           Others can add this computer with "Add by IP" using one of these addresses.
-          LocalShare uses UDP {47820} (discovery) and TCP {self.port} (transfers). Allow both in your firewall.
+          PatchDrop uses UDP {47820} (discovery) and TCP {self.port} (transfers). Allow both in your firewall.
         </p>
       </div>
       <div class="field">

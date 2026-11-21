@@ -24,8 +24,8 @@ import (
 	"sync"
 	"time"
 
-	"localshare/internal/identity"
-	"localshare/internal/protocol"
+	"patchdrop/internal/identity"
+	"patchdrop/internal/protocol"
 )
 
 const (

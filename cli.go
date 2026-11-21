@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
-	"localshare/internal/discovery"
-	"localshare/internal/netif"
-	"localshare/internal/node"
-	"localshare/internal/server"
+	"patchdrop/internal/discovery"
+	"patchdrop/internal/netif"
+	"patchdrop/internal/node"
+	"patchdrop/internal/server"
 )
 
 func isCLICommand(arg string) bool {
@@ -22,19 +22,19 @@ func isCLICommand(arg string) bool {
 	return false
 }
 
-const usage = `LocalShare – share files over the local network
+const usage = `PatchDrop – share files over the local network
 
 Usage:
-  localshare                         start the desktop app
-  localshare peers                   list devices found on the network (8 s)
-  localshare send <ip[:port]> <file|folder>...
+  patchdrop                         start the desktop app
+  patchdrop peers                   list devices found on the network (8 s)
+  patchdrop send <ip[:port]> <file|folder>...
                                      send to a device by address
-  localshare receive                 headless receiver; accepts everything
-  localshare interfaces              show the interfaces used for discovery
+  patchdrop receive                 headless receiver; accepts everything
+  patchdrop interfaces              show the interfaces used for discovery
 
 Environment:
-  LOCALSHARE_PROFILE   use a separate settings folder (run several instances)
-  LOCALSHARE_PORT      transfer port (default 47821)
+  PATCHDROP_PROFILE   use a separate settings folder (run several instances)
+  PATCHDROP_PORT      transfer port (default 47821)
 `
 
 type cliEvents struct{}
@@ -75,7 +75,7 @@ func runCLI(opts node.Options, args []string) int {
 		return 0
 
 	case "peers":
-		discovery.Debug = os.Getenv("LOCALSHARE_DEBUG") != ""
+		discovery.Debug = os.Getenv("PATCHDROP_DEBUG") != ""
 		n, err := node.New(opts, nil)
 		if err == nil {
 			err = n.Start(ctx)
@@ -91,7 +91,7 @@ func runCLI(opts node.Options, args []string) int {
 		}
 		peers := n.Peers()
 		if len(peers) == 0 {
-			fmt.Println("No devices found. Check the firewall on both machines, or use: localshare send <ip> <file>")
+			fmt.Println("No devices found. Check the firewall on both machines, or use: patchdrop send <ip> <file>")
 		}
 		for _, p := range peers {
 			state := "offline"

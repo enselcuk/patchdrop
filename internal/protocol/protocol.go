@@ -15,7 +15,7 @@ const (
 
 // Announce is the UDP discovery datagram (JSON encoded).
 type Announce struct {
-	Magic       string `json:"magic"` // always "localshare"
+	Magic       string `json:"magic"` // always "patchdrop"
 	V           int    `json:"v"`
 	ID          string `json:"id"`
 	Name        string `json:"name"`
@@ -27,7 +27,7 @@ type Announce struct {
 	Bye         bool   `json:"bye,omitempty"` // sent on shutdown
 }
 
-const Magic = "localshare"
+const Magic = "patchdrop"
 
 // Info is returned by GET /api/info.
 type Info struct {

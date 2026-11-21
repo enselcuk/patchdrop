@@ -18,7 +18,7 @@
   <div class="empty">
     <div class="pulse"></div>
     <p><strong>Looking for devices…</strong></p>
-    <p class="muted">Open LocalShare on another computer on this network. If nothing shows up, add it by IP below.</p>
+    <p class="muted">Open PatchDrop on another computer on this network. If nothing shows up, add it by IP below.</p>
   </div>
 {:else}
   <ul>

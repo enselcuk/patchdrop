@@ -1,4 +1,4 @@
-// Package netif enumerates the IPv4 interfaces LocalShare should use for
+// Package netif enumerates the IPv4 interfaces PatchDrop should use for
 // discovery. LocalSend-style apps send one multicast packet on whatever
 // interface the OS picks (often Wi-Fi or a VPN); we instead send on every real
 // interface, which is what makes discovery work on wired-only networks.

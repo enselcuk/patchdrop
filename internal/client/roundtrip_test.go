@@ -12,10 +12,10 @@ import (
 	"testing"
 	"time"
 
-	"localshare/internal/client"
-	"localshare/internal/identity"
-	"localshare/internal/protocol"
-	"localshare/internal/server"
+	"patchdrop/internal/client"
+	"patchdrop/internal/identity"
+	"patchdrop/internal/protocol"
+	"patchdrop/internal/server"
 )
 
 type harness struct {
