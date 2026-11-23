@@ -32,7 +32,7 @@ Download from <https://patchdrop.enginsistem.com> or the
 
 | OS      | File                    | Notes |
 |---------|-------------------------|-------|
-| macOS   | `PatchDrop-macOS.dmg` (Intel + Apple Silicon) | Copy to /Applications. The app is not notarized, so on first launch open System Settings → Privacy & Security → **Open Anyway**. Allow **Local Network** access when asked. |
+| macOS   | `PatchDrop-macOS.dmg` (Intel + Apple Silicon) | Copy to /Applications. Signed and notarized by Apple. Allow **Local Network** access when asked. |
 | Windows | `PatchDrop-Windows-Setup-x64.exe` (installer) | Installs to Program Files with Start menu and desktop shortcuts, adds the firewall rule for Private/Domain networks, and installs WebView2 if missing. Uninstall from Settings → Apps. |
 | Windows | `PatchDrop-Windows-x64.zip` (portable) | Needs the WebView2 runtime (preinstalled on Windows 10/11). When the firewall asks, allow **Private networks**. |
 

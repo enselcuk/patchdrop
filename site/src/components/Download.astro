@@ -35,14 +35,6 @@ const fileLabel = (kind: string, name: string) => [kind, mb(name)].filter(Boolea
         <h4>{d.macTitle}</h4>
         <p class="dl__intro">{d.macIntro}</p>
         <ol class="dl__steps">{d.macSteps.map((s) => <li>{s}</li>)}</ol>
-        <figure class="mac-fig" aria-hidden="true">
-          <div class="mac-fig__bar"><span></span><span></span><span></span><b>{d.macFigure}</b></div>
-          <div class="mac-fig__body">
-            <Icon name="shield" size={22} />
-            <span>{d.macFigureText}</span>
-            <span class="mac-fig__btn">{d.macFigureButton}</span>
-          </div>
-        </figure>
       </article>
 
       <article class="card dl" aria-labelledby="dl-win">

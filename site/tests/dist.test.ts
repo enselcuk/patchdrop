@@ -55,11 +55,11 @@ test('made-by links exact and followed', () => {
   const a = load('tr').querySelectorAll('#made-by a')
   expect(a.map(x => x.getAttribute('href'))).toEqual(expect.arrayContaining(['https://enginsistem.com/?utm_source=patchdrop','https://www.linkedin.com/in/selcuk-engin/','https://x.com/enselcuk','https://www.youtube.com/@selcukengin','https://x.com/enginsistem','https://www.instagram.com/enginsistem/','https://www.youtube.com/@enginsistem']))
   expect(a.every(x => !(x.getAttribute('rel') ?? '').includes('nofollow'))).toBe(true) })
-test('mac tips say Open Anyway, never right-click → Open', () => {
+test('mac section says signed and notarized, no Open Anyway workaround', () => {
   for (const p of ['', 'tr']) { const t = load(p).querySelector('#download')!.text
-    expect(t).toMatch(/Open Anyway|Yine de Aç/); expect(t).not.toMatch(/right-click|sağ tık/i) }
-  expect(load('').querySelector('#download')!.text).toContain('on macOS 12: System Preferences → Security & Privacy → Open Anyway')
-  expect(load('tr').querySelector('#download')!.text).toContain('macOS 12’de: Sistem Tercihleri → Güvenlik ve Gizlilik → Yine de Aç') })
+    expect(t).not.toMatch(/Open Anyway|Yine de Aç|right-click|sağ tık/i) }
+  expect(load('').querySelector('#download')!.text).toContain('signed and notarized by Apple')
+  expect(load('tr').querySelector('#download')!.text).toContain('imzalanmış ve onaylanmıştır') })
 test('footer copyright', () => expect(load('').querySelector('footer')!.text).toContain('© 2026 Engin Tasarım Ltd. Şti.'))
 test('404 pages exist in both languages', () => { expect(existsSync('dist/404.html')).toBe(true); expect(existsSync('dist/tr/404/index.html')).toBe(true) })
 test('beta bar links to GitHub issues', () => expect(load('').querySelector('[data-beta] a')!.getAttribute('href')).toBe('https://github.com/enselcuk/patchdrop/issues'))
